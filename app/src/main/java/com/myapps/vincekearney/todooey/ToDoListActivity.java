@@ -16,6 +16,7 @@ public class ToDoListActivity extends AppCompatActivity
 {
     private final int TODO_ADDED = 1;
     private TextView label;
+    private ToDoDBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -27,6 +28,8 @@ public class ToDoListActivity extends AppCompatActivity
         label = (TextView) findViewById(R.id.mainLabel);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        this.dbHelper = new ToDoDBHelper(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if(fab != null) // Ensure the FAB has been created before adding a listener - Threw an error otherwise.
@@ -58,6 +61,9 @@ public class ToDoListActivity extends AppCompatActivity
             // Get the string value that has the ID entered in the parameter.
             String toDo = data.getStringExtra(AddToDoActivity.ToDo_Desc);
             label.setText(toDo);
+            dbHelper.open();
+            dbHelper.addToDo("1",toDo,false);
+            dbHelper.close();
         }
     }
 

@@ -20,7 +20,7 @@ public class DBManager extends SQLiteOpenHelper
                     "CREATE TABLE IF NOT EXISTS " +TO_DO_ITEMS_TABlE +"("
                     + COLUMN_NAME_TODO_ID + " TEXT, "
                     + COLUMN_NAME_TODO_TEXT + " TEXT, "
-                    + COLUMN_NAME_COMPLETED + " INTEGER, " + ")";
+                    + COLUMN_NAME_COMPLETED + " INTEGER" + ")";
 
     public DBManager(Context context)
     {

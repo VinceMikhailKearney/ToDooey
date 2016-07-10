@@ -33,6 +33,8 @@ public class ToDoDBHelper extends DBManager
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_TEXT, text);
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, completed);
 
+        Log.i(TAG, "Values = " + toDoValues);
+
         db.insert(ToDoDBHelper.TO_DO_ITEMS_TABlE, null, toDoValues);
     }
 
@@ -65,15 +67,15 @@ public class ToDoDBHelper extends DBManager
     }
 
     // Convenience methods
-//    public void open()
-//    {
-//        db = dataManager.getWritableDatabase();
-//    }
-//
-//    public void close()
-//    {
-//        dataManager.close();
-//    }
+    public void open()
+    {
+        db = super.getWritableDatabase();
+    }
+
+    public void close()
+    {
+        super.close();
+    }
 
 
 
