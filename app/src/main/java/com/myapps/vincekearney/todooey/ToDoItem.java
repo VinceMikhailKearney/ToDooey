@@ -33,11 +33,11 @@ public class ToDoItem
 
     @Override
     public String toString() {
-        return "ToDoItem{" +
-                "id = " + this.todoid +
-                "/ntext = " + this.todotext +
-                "/ndate = " + this.date +
-                "/ncompleted = " + this.completed + '}';
+        return "\nToDoItem{" +
+                "\nid = " + this.todoid +
+                "\ntext = " + this.todotext +
+                "\ndate = " + this.date +
+                "\ncompleted = " + this.completed + '}';
     }
 
     //==============================END OF CLASS==============================

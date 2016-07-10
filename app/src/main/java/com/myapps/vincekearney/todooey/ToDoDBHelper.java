@@ -15,9 +15,9 @@ public class ToDoDBHelper extends DBManager
     private SQLiteDatabase db;
     private final String[] allColumns =
     {
+        ToDoDBHelper.COLUMN_NAME_TODO_ID,
         ToDoDBHelper.COLUMN_NAME_TODO_TEXT,
-        ToDoDBHelper.COLUMN_NAME_COMPLETED,
-        ToDoDBHelper.COLUMN_NAME_TODO_ID
+        ToDoDBHelper.COLUMN_NAME_COMPLETED
     };
 
     public ToDoDBHelper(Context context)
@@ -43,12 +43,15 @@ public class ToDoDBHelper extends DBManager
     // Retrieving the list of To-Do items
     public List<ToDoItem>  getAllToDos()
     {
-        Log.i(TAG, "Asking for all ToDos.");
+        Log.i(TAG, "Asking for all ToDo items.");
 
         List<ToDoItem> todos = new ArrayList<>();
-        Cursor cursor = db.query(ToDoDBHelper.TO_DO_ITEMS_TABlE,
-                allColumns,null, null, null, null, null );
+        // Query sets to select ALL from the To-Do table.
+        String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
 
+        // Starting at the first row, continue to move until past the last row.
         cursor.moveToFirst();
         while(!cursor.isAfterLast())
         {
@@ -57,7 +60,7 @@ public class ToDoDBHelper extends DBManager
             cursor.moveToNext();
         }
         cursor.close();
-        Log.i(TAG, "ToDos - " + todos);
+
         return todos;
     }
 
@@ -67,7 +70,7 @@ public class ToDoDBHelper extends DBManager
         todo.setId(cursor.getString(0));
         todo.setTodotext(cursor.getString(1));
         todo.setDate(null);
-        todo.setCompleted(cursor.getInt(3) == 1);
+        todo.setCompleted(false);
         return todo;
     }
 
