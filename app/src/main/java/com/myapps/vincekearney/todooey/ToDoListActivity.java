@@ -73,4 +73,5 @@ public class ToDoListActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+    //==============================END OF CLASS==============================
 }
