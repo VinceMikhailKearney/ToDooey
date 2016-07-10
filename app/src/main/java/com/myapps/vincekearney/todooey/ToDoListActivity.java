@@ -43,6 +43,14 @@ public class ToDoListActivity extends AppCompatActivity
         }
     }
 
+    // This is the callback when AddToDoActivity finishes - Passes an Intent with data that we can use.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
