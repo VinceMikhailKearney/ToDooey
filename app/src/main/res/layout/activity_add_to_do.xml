@@ -10,8 +10,28 @@
     tools:context="com.myapps.vincekearney.todooey.AddToDoActivity">
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_to_do"/>
+        android:layout_alignParentTop="true"
+        android:padding="20dp"
+        android:text="@string/explain_add_to_do"/>
+
+    <EditText
+        android:id="@+id/toDoText"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:padding="20dp"
+        android:hint="@string/to_do"
+        android:layout_below="@id/label" />
+
+    <Button
+        android:id="@+id/addToDoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toDoText"
+        android:padding="20dp"
+        android:text="@string/add_to_do"
+        android:onClick="addToDoClicked"/>
 
 </RelativeLayout>
