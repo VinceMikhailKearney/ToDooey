@@ -13,7 +13,29 @@
     tools:showIn="@layout/activity_to_do_list">
 
     <TextView
+        android:id="@+id/mainLabel"
+        android:text="@string/main_todo_label"
+        android:textColor="#fe06bc"
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/mainLabel">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText"
+            android:layout_gravity="center_horizontal"
+            android:inputType="none"
+            android:hint="@string/enter_todo"/>
+    </LinearLayout>
+
 </RelativeLayout>
