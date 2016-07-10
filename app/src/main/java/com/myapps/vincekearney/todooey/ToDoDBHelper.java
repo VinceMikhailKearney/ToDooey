@@ -12,7 +12,6 @@ import java.util.List;
 public class ToDoDBHelper extends DBManager
 {
     private static final String TAG = "ToDoDataBaseHelper";
-    private SQLiteDatabase db;
     private final String[] allColumns =
     {
         ToDoDBHelper.COLUMN_NAME_TODO_ID,
@@ -37,7 +36,8 @@ public class ToDoDBHelper extends DBManager
 
         Log.i(TAG, "Values = " + toDoValues);
 
-        db.insert(ToDoDBHelper.TO_DO_ITEMS_TABlE, null, toDoValues);
+        thisDataBase().insert(ToDoDBHelper.TO_DO_ITEMS_TABlE, null, toDoValues);
+        closeDBManger();
     }
 
     // Retrieving the list of To-Do items
@@ -48,8 +48,7 @@ public class ToDoDBHelper extends DBManager
         List<ToDoItem> todos = new ArrayList<>();
         // Query sets to select ALL from the To-Do table.
         String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE;
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = thisDataBase().rawQuery(query, null);
 
         // Starting at the first row, continue to move until past the last row.
         cursor.moveToFirst();
@@ -60,6 +59,7 @@ public class ToDoDBHelper extends DBManager
             cursor.moveToNext();
         }
         cursor.close();
+        closeDBManger();
 
         return todos;
     }
@@ -75,17 +75,16 @@ public class ToDoDBHelper extends DBManager
     }
 
     // Convenience methods
-    public void open()
+    public SQLiteDatabase thisDataBase()
     {
-        db = super.getWritableDatabase();
+        return super.getWritableDatabase();
     }
 
-    public void close()
+    public void closeDBManger()
     {
+        // Need to close down the DBManager (SQLiteOpenHelper).
         super.close();
     }
-
-
 
     //==============================END OF CLASS==============================
 }

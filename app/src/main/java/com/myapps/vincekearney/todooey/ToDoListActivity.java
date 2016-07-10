@@ -65,12 +65,10 @@ public class ToDoListActivity extends AppCompatActivity
             List<ToDoItem> toDos = new ArrayList<>();
             // Get the string value that has the ID entered in the parameter.
             String toDo = data.getStringExtra(AddToDoActivity.ToDo_Desc);
-            dbHelper.open();
             dbHelper.addToDo("1",toDo,false);
             for(ToDoItem item : dbHelper.getAllToDos())
                 toDos.add(item);
             label.setText(toDos.toString());
-            dbHelper.close();
         }
     }
 
