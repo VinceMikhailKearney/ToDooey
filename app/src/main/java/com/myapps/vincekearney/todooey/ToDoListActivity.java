@@ -9,11 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 //import android.view.WindowManager;
 
 public class ToDoListActivity extends AppCompatActivity
 {
     private final int TODO_ADDED = 1;
+    private TextView label;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -22,6 +24,7 @@ public class ToDoListActivity extends AppCompatActivity
         // Here we are telling the app that we want to be full screen - I.e. The menu bar at the top is gone (date and battery thang).
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_to_do_list);
+        label = (TextView) findViewById(R.id.mainLabel);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -48,7 +51,14 @@ public class ToDoListActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-
+        // We need to make sure the requestCode matches the task that we asked for above.
+        // If result is OK - We have something we need to look at.
+        if (requestCode == TODO_ADDED && resultCode == RESULT_OK)
+        {
+            // Get the string value that has the ID entered in the parameter.
+            String toDo = data.getStringExtra(AddToDoActivity.ToDo_Desc);
+            label.setText(toDo);
+        }
     }
 
     @Override
