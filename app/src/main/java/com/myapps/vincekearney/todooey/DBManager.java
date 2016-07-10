@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class DBManager extends SQLiteOpenHelper
 {
-
+    private static final String TAG = "DBManager";
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "ToDooey.db";
     public static final String TO_DO_ITEMS_TABlE = "ToDoItems";
@@ -25,11 +25,13 @@ public class DBManager extends SQLiteOpenHelper
     public DBManager(Context context)
     {
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
+        Log.i(TAG, "Just instantiating the DBManager.");
     }
 
     @Override
     public void onCreate(SQLiteDatabase db)
     {
+        Log.i(TAG, "Creating the database - " + CREATE_DATABASE);
         db.execSQL(CREATE_DATABASE);
     }
 
