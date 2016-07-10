@@ -1,18 +1,17 @@
 package com.myapps.vincekearney.todooey;
 
-import javax.persistence.*;
 import java.util.Date;
 
 public class ToDoItem
 {
-    private Integer todoid;
+    private String todoid;
     private Boolean completed;
     private Date date;
     private String todotext;
 
     public ToDoItem () {}
 
-    public ToDoItem(String todotext, Integer todoid, Boolean completed, Date date)
+    public ToDoItem(String todotext, String todoid, Boolean completed, Date date)
     {
         this.todotext = todotext;
         this.todoid = todoid;
@@ -23,8 +22,8 @@ public class ToDoItem
     public String getTodotext() { return this.todotext; }
     public void setTodotext(String todotext) { this.todotext = todotext; }
 
-    public Integer getId() { return this.todoid; }
-    public void setId(Integer todoid) { this.todoid = todoid; }
+    public String getId() { return this.todoid; }
+    public void setId(String todoid) { this.todoid = todoid; }
 
     public Boolean getCompleted() { return this.completed; }
     public void setCompleted(Boolean completed) { this.completed = completed; }
