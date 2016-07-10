@@ -14,13 +14,12 @@ public class DBManager extends SQLiteOpenHelper
     public static final String COLUMN_NAME_TODO_ID = "todoid";
     public static final String COLUMN_NAME_TODO_TEXT = "todotext";
     public static final String COLUMN_NAME_COMPLETED = "completed";
-    public static final String COLUMN_NAME_DATE = "date";
+//    public static final String COLUMN_NAME_DATE = "date";
 
     private static final String CREATE_DATABASE =
                     "CREATE TABLE IF NOT EXISTS " +TO_DO_ITEMS_TABlE +"("
-                    + COLUMN_NAME_TODO_ID + " INTEGER PRIMARY KEY, "
+                    + COLUMN_NAME_TODO_ID + " TEXT, "
                     + COLUMN_NAME_TODO_TEXT + " TEXT, "
-                    + COLUMN_NAME_DATE + " INETGER, "
                     + COLUMN_NAME_COMPLETED + " INTEGER, " + ")";
 
     public DBManager(Context context)
