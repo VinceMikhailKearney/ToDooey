@@ -53,7 +53,7 @@ public class ToDoDBHelper extends DBManager
         cursor.moveToFirst();
         while(!cursor.isAfterLast())
         {
-            ToDoItem todo = cursorToIntallToDo(cursor);
+            ToDoItem todo = createToDoFrom(cursor);
             todos.add(todo);
             cursor.moveToNext();
         }
@@ -85,7 +85,7 @@ public class ToDoDBHelper extends DBManager
         closeDBManger();
     }
 
-    public ToDoItem cursorToIntallToDo(Cursor cursor)
+    public ToDoItem createToDoFrom(Cursor cursor)
     {
         ToDoItem todo = new ToDoItem();
         todo.setId(cursor.getString(0));
