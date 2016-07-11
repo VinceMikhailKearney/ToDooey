@@ -49,7 +49,6 @@ public class ToDoDBHelper extends DBManager
         // Query sets to select ALL from the To-Do table.
         String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE;
         Cursor cursor = thisDataBase().rawQuery(query, null);
-
         // Starting at the first row, continue to move until past the last row.
         cursor.moveToFirst();
         while(!cursor.isAfterLast())
@@ -58,9 +57,33 @@ public class ToDoDBHelper extends DBManager
             todos.add(todo);
             cursor.moveToNext();
         }
+
         cursor.close();
         closeDBManger();
+        return todos;
+    }
 
+    // Retrieving the list of To-Do items
+    public List<ToDoItem>  deleteAllToDos()
+    {
+        Log.i(TAG, "Deleting all to do items.");
+
+        List<ToDoItem> todos = new ArrayList<>();
+        // Query sets to select ALL from the To-Do table.
+        String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE;
+        Cursor cursor = thisDataBase().rawQuery(query, null);
+        // Starting at the first row, continue to move until past the last row.
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast())
+        {
+            String text = cursor.getString(1);
+            Log.i(TAG, "String - " + text);
+            thisDataBase().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_TEXT +" = \"" +text +"\"", null);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        closeDBManger();
         return todos;
     }
 

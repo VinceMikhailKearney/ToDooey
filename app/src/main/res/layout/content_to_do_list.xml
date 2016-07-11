@@ -12,6 +12,14 @@
     tools:context="com.myapps.vincekearney.todooey.ToDoListActivity"
     tools:showIn="@layout/activity_to_do_list">
 
+    <Button
+        android:id="@+id/deleteToDoItems"
+        android:text="Delete all to do"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mainLabel"
+        android:onClick="deleteAllToDoItems"/>
+
     <TextView
         android:id="@+id/mainLabel"
         android:text="@string/main_todo_label"
