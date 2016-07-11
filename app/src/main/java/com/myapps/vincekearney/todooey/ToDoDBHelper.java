@@ -64,11 +64,10 @@ public class ToDoDBHelper extends DBManager
     }
 
     // Retrieving the list of To-Do items
-    public List<ToDoItem>  deleteAllToDos()
+    public void deleteAllToDos()
     {
         Log.i(TAG, "Deleting all to do items.");
 
-        List<ToDoItem> todos = new ArrayList<>();
         // Query sets to select ALL from the To-Do table.
         String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE;
         Cursor cursor = thisDataBase().rawQuery(query, null);
@@ -84,7 +83,6 @@ public class ToDoDBHelper extends DBManager
 
         cursor.close();
         closeDBManger();
-        return todos;
     }
 
     public ToDoItem cursorToIntallToDo(Cursor cursor)
