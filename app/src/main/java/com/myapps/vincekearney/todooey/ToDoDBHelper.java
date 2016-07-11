@@ -12,12 +12,6 @@ import java.util.List;
 public class ToDoDBHelper extends DBManager
 {
     private static final String TAG = "ToDoDataBaseHelper";
-    private final String[] allColumns =
-    {
-        ToDoDBHelper.COLUMN_NAME_TODO_ID,
-        ToDoDBHelper.COLUMN_NAME_TODO_TEXT,
-        ToDoDBHelper.COLUMN_NAME_COMPLETED
-    };
 
     public ToDoDBHelper(Context context)
     {
@@ -32,7 +26,7 @@ public class ToDoDBHelper extends DBManager
         ContentValues toDoValues = new ContentValues();
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_ID, id);
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_TEXT, text);
-        toDoValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, completed);
+        toDoValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, completed ? 1 : 0);
 
         Log.i(TAG, "Values = " + toDoValues);
 
@@ -91,7 +85,7 @@ public class ToDoDBHelper extends DBManager
         todo.setId(cursor.getString(0));
         todo.setTodotext(cursor.getString(1));
         todo.setDate(null);
-        todo.setCompleted(false);
+        todo.setCompleted(cursor.getInt(2) == 1);
         return todo;
     }
 
