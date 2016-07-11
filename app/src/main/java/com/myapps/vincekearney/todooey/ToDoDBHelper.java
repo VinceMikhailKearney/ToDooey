@@ -24,7 +24,7 @@ public class ToDoDBHelper extends DBManager
         Log.i(TAG, "Adding a ToDo item.");
 
         ContentValues toDoValues = new ContentValues();
-        toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_ID, id);
+        toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_ID, id); // Do I need? I can delete based upon text.
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_TEXT, text);
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, completed ? 1 : 0);
 
