@@ -32,6 +32,8 @@ public class ToDoListActivity extends AppCompatActivity
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_to_do_list);
         label = (TextView) findViewById(R.id.mainLabel);
+        toDoList = (ListView) findViewById(R.id.toDoList);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
