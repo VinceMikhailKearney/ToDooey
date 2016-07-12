@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class ToDoListActivity extends AppCompatActivity
     private final int TODO_ADDED = 1;
     private TextView label;
     private ToDoDBHelper dbHelper;
+    private ListView toDoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
