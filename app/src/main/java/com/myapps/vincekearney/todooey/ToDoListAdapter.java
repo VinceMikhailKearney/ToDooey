@@ -5,16 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ToDoListAdapter extends BaseAdapter
 {
     private Context myContext;
     private LayoutInflater myInflater;
-    private ArrayList<ToDoItem> myDataSource;
+    private List<ToDoItem> myDataSource;
+    private CheckBox toDoCheckBox;
 
-    public ToDoListAdapter(Context context, ArrayList<ToDoItem> items) {
+    public ToDoListAdapter(Context context, List<ToDoItem> items) {
         myContext = context;
         myDataSource = items;
         myInflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -28,8 +30,16 @@ public class ToDoListAdapter extends BaseAdapter
 
     // Basically the cell that we use in cellForRowAtIndexPath
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        if(convertView == null)
+            convertView = myInflater.inflate(R.layout.to_do_list_row, parent, false);
+
+        ToDoItem item = (ToDoItem) getItem(position);
+        this.toDoCheckBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+        this.toDoCheckBox.setText(item.getTodotext());
+        this.toDoCheckBox.setChecked(item.getCompleted());
+        return convertView;
     }
 
     // So as far as I can see so far - indexPath.row
