@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,10 +21,9 @@ import java.util.List;
 public class ToDoListActivity extends AppCompatActivity
 {
     private final int TODO_ADDED = 1;
-    private TextView label;
     private ToDoDBHelper dbHelper;
     private ListView toDoList;
-    private List<String> toDoListItems;
+    private List<String> toDoListItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,7 +32,6 @@ public class ToDoListActivity extends AppCompatActivity
         // Here we are telling the app that we want to be full screen - I.e. The menu bar at the top is gone (date and battery thang).
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_to_do_list);
-        label = (TextView) findViewById(R.id.mainLabel);
         toDoList = (ListView) findViewById(R.id.toDoList);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -42,6 +41,9 @@ public class ToDoListActivity extends AppCompatActivity
 
         for(ToDoItem item : dbHelper.getAllToDos())
             this.toDoListItems.add(item.getTodotext());
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, this.toDoListItems);
+        this.toDoList.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if(fab != null) // Ensure the FAB has been created before adding a listener - Threw an error otherwise.
