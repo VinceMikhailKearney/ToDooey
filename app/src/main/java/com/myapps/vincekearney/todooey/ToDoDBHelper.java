@@ -19,7 +19,7 @@ public class ToDoDBHelper extends DBManager
     }
 
     // Adding a To-Do item
-    public void addToDo(String id, String text, Boolean completed)
+    public ToDoItem addToDo(String id, String text, Boolean completed)
     {
         Log.i(TAG, "Adding a ToDo item.");
 
@@ -32,6 +32,29 @@ public class ToDoDBHelper extends DBManager
 
         thisDataBase().insert(ToDoDBHelper.TO_DO_ITEMS_TABlE, null, toDoValues);
         closeDBManger();
+
+        return getToDo(text);
+    }
+
+    public ToDoItem getToDo(String text)
+    {
+        Log.i(TAG, "Asking for To-Do with text: " + text);
+        // Query sets to select ALL from the To-Do table.
+        String searchString = String.format("%s%s%s","'",text,"'");
+        String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE + " WHERE " + COLUMN_NAME_TODO_TEXT + " = " + searchString;
+        Cursor cursor = thisDataBase().rawQuery(query, null);
+
+        if (cursor.moveToFirst() && cursor.getCount() == 1)
+        {
+            ToDoItem item = createToDoFrom(cursor);
+            cursor.close();
+            closeDBManger();
+            return item;
+        }
+        else // The count was greater than 1
+        {
+            throw new IllegalStateException("Only supposed to fetch one. Count was -> " + cursor.getCount());
+        }
     }
 
     // Retrieving the list of To-Do items
