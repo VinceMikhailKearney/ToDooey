@@ -23,7 +23,7 @@ public class ToDoListActivity extends AppCompatActivity
     private final int TODO_ADDED = 1;
     private ToDoDBHelper dbHelper;
     private ListView toDoList;
-    private List<String> toDoListItems = new ArrayList<>();
+    private List<ToDoItem> toDoListItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,9 +40,9 @@ public class ToDoListActivity extends AppCompatActivity
         this.dbHelper = new ToDoDBHelper(this);
 
         for(ToDoItem item : dbHelper.getAllToDos())
-            this.toDoListItems.add(item.getTodotext());
+            this.toDoListItems.add(item);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, this.toDoListItems);
+        ToDoListAdapter adapter = new ToDoListAdapter(this, this.toDoListItems);
         this.toDoList.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -63,9 +63,15 @@ public class ToDoListActivity extends AppCompatActivity
         }
     }
 
+    // My on click events
     public void deleteAllToDoItems(View view)
     {
         dbHelper.deleteAllToDos();
+    }
+
+    public void toDoClicked(View view)
+    {
+
     }
 
     // This is the callback when AddToDoActivity finishes - Passes an Intent with data that we can use.
@@ -80,7 +86,7 @@ public class ToDoListActivity extends AppCompatActivity
             // Get the string value that has the ID entered in the parameter.
             String toDo = data.getStringExtra(AddToDoActivity.ToDo_Desc);
             dbHelper.addToDo("1",toDo,false);
-            this.toDoListItems.add(toDo);
+            this.toDoListItems.add(dbHelper.getToDo(toDo));
         }
     }
 
