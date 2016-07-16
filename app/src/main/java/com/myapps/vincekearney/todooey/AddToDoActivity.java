@@ -3,6 +3,7 @@ package com.myapps.vincekearney.todooey;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import android.view.View;
@@ -39,11 +40,13 @@ public class AddToDoActivity extends AppCompatActivity {
 
         if(toDo.isEmpty())
         {
+            Log.i("AddToDo", "To do text empty");
             // As the to do item is empty we are simply cancelling. Set the result code to cancelled.
             setResult(RESULT_CANCELED);
         }
         else
         {
+            Log.i("AddToDo", "We got text");
             // Here we have data that we want to pass back.
             // We create an Intent that is used to hold the data and set the result code
             // to OK to indicate that there is something we need to look at.
