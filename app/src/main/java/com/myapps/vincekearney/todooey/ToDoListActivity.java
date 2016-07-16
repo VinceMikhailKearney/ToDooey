@@ -24,6 +24,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     private final int TODO_ADDED = 1;
     private static final String TAG = "ToDoListActivity";
     private ToDoDBHelper dbHelper;
+    private ToDoListAdapter toDoAdapter;
     private ListView toDoList;
     private List<ToDoItem> toDoListItems = new ArrayList<>();
 
@@ -44,9 +45,9 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         for(ToDoItem item : dbHelper.getAllToDos())
             this.toDoListItems.add(item);
 
-        ToDoListAdapter adapter = new ToDoListAdapter(this, this.toDoListItems);
-        adapter.setToDoListAdapterListener(this);
-        this.toDoList.setAdapter(adapter);
+        this.toDoAdapter = new ToDoListAdapter(this, this.toDoListItems);
+        this.toDoAdapter.setToDoListAdapterListener(this);
+        this.toDoList.setAdapter(this.toDoAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if(fab != null) // Ensure the FAB has been created before adding a listener - Threw an error otherwise.
@@ -70,6 +71,9 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     public void deleteAllToDoItems(View view)
     {
         dbHelper.deleteAllToDos();
+        this.toDoListItems = dbHelper.getAllToDos();
+        this.toDoAdapter.setToDoList(this.toDoListItems);
+        this.toDoAdapter.notifyDataSetChanged();
     }
 
     // Overriding of the ToDoListAdapaterListener method.

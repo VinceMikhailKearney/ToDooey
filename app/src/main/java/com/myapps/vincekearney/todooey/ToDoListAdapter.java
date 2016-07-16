@@ -16,7 +16,7 @@ public class ToDoListAdapter extends BaseAdapter
     private static final String TAG = "ToDoAdapter";
     private Context context;
     private LayoutInflater inflater;
-    private List<ToDoItem> dataSource;
+    private List<ToDoItem> todoList;
 
     private ToDoListAdapterListener toDoListener;
 
@@ -27,8 +27,13 @@ public class ToDoListAdapter extends BaseAdapter
 
     public ToDoListAdapter(Context context, List<ToDoItem> items) {
         this.context = context;
-        this.dataSource = items;
+        this.todoList = items;
         this.inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public void setToDoList(List<ToDoItem> list)
+    {
+        this.todoList = list;
     }
 
     public void setToDoListAdapterListener(ToDoListAdapterListener listener)
@@ -66,7 +71,7 @@ public class ToDoListAdapter extends BaseAdapter
     // Essentially numberOfRowsInSection
     @Override
     public int getCount() {
-        return this.dataSource.size();
+        return this.todoList.size();
     }
 
     // Basically the cell that we use in cellForRowAtIndexPath
@@ -89,6 +94,6 @@ public class ToDoListAdapter extends BaseAdapter
     // This just pulls out the object that we want for the row we're filling in from the data source we passed in.
     @Override
     public Object getItem(int position) {
-        return this.dataSource.get(position);
+        return this.todoList.get(position);
     }
 }

@@ -28,8 +28,6 @@ public class ToDoDBHelper extends DBManager
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_TEXT, text);
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, completed ? 1 : 0);
 
-        Log.i(TAG, "Values = " + toDoValues);
-
         thisDataBase().insert(ToDoDBHelper.TO_DO_ITEMS_TABlE, null, toDoValues);
         closeDBManger();
 
@@ -45,7 +43,6 @@ public class ToDoDBHelper extends DBManager
         String searchString = String.format("%s = %s%s%s",ToDoDBHelper.COLUMN_NAME_TODO_TEXT,"'",text,"'");
         Log.i(TAG, "Search string = " + searchString);
         thisDataBase().update(TO_DO_ITEMS_TABlE, newValues, searchString, null);
-//        thisDataBase().update(TO_DO_ITEMS_TABlE, newValues, ToDoDBHelper.COLUMN_NAME_TODO_TEXT+"="+text, null);
     }
 
     public ToDoItem getToDo(String text)
@@ -107,7 +104,7 @@ public class ToDoDBHelper extends DBManager
         {
             String text = cursor.getString(1);
             Log.i(TAG, "String - " + text);
-            thisDataBase().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_TEXT +" = \"" +text +"\"", null);
+            thisDataBase().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_TEXT +" = \"" + text +"\"", null);
             cursor.moveToNext();
         }
 
