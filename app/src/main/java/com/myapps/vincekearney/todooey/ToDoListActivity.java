@@ -24,21 +24,16 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
 {
     private final int TODO_ADDED = 1;
     private static final String TAG = "ToDoListActivity";
+
+    private ActionBar actionBar;
+    private ActionBarDrawerToggle drawerToggle;
+    private DeleteToDoDialog deleteToDoDialog;
+    private DrawerLayout drawerLayout;
+    private List<ToDoItem> toDoListItems = new ArrayList<>();
+    private String activityTitle;
     private ToDoDBHelper dbHelper;
     private ToDoListAdapter toDoAdapter;
-    private DeleteToDoDialog deleteToDoDialog;
-    private ListView toDoList;
-    private List<ToDoItem> toDoListItems = new ArrayList<>();
-
-    //==================================================================================================
-    private ActionBar actionBar;
-    private ListView drawerList;
-    private ArrayAdapter<String> navArrayAdapter;
-    private ActionBarDrawerToggle drawerToggle;
-    private DrawerLayout drawerLayout;
-    private String activityTitle;
-    //==================================================================================================
-
+    
     /* --- Lifecycle methods ---- */
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,7 +44,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
 
         // Set content view and assign others
         setContentView(R.layout.activity_to_do_list);
-        this.toDoList = (ListView) findViewById(R.id.toDoList);
+        ListView toDoList = (ListView) findViewById(R.id.toDoList);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         this.drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
@@ -71,7 +66,8 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         // ToDoAdapter
         this.toDoAdapter = new ToDoListAdapter(this, this.toDoListItems);
         this.toDoAdapter.setToDoListAdapterListener(this);
-        this.toDoList.setAdapter(this.toDoAdapter);
+        if(toDoList != null)
+            toDoList.setAdapter(this.toDoAdapter);
         // Delete Dialog
         this.deleteToDoDialog = new DeleteToDoDialog(this);
         this.deleteToDoDialog.setListener(this);
@@ -154,18 +150,19 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     /* ---- Navigation Drawer ---- */
     private void populateNavDrawer()
     {
-        this.drawerList = (ListView) findViewById(R.id.navList);
+        ListView drawerList = (ListView) findViewById(R.id.navList);
         String[] osArray = { "All", "Completed", "Not Completed" };
-        this.navArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, osArray);
-        this.drawerList.setAdapter(this.navArrayAdapter);
-
-        this.drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                refreshToDos(position);
-                drawerLayout.closeDrawers();
-            }
-        });
+        ArrayAdapter<String> navAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, osArray);
+        if(drawerList != null) {
+            drawerList.setAdapter(navAdapter);
+            drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    refreshToDos(position);
+                    drawerLayout.closeDrawers();
+                }
+            });
+        }
     }
 
     private void setupDrawer()
