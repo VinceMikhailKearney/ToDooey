@@ -6,20 +6,22 @@ import android.content.DialogInterface;
 
 public class DeleteToDoDialog extends AlertDialog
 {
-    private ToDoItem toDoItem;
     private DeleteDialogListener listener;
+    private ToDoItem toDoItem;
 
+    // The interface (or protocol in iOS for delegate) that states the methods the listener implements.
     public interface DeleteDialogListener
     {
         void DeleteToDo(ToDoItem item);
         void DeleteAllToDos();
     }
 
-    protected DeleteToDoDialog(Context context)
-    {
+    /* ---- Constructor ---- */
+    protected DeleteToDoDialog(Context context) {
         super(context);
     }
 
+    /* ---- Setting up the dialog ---- */
     public DeleteToDoDialog setDialogToDo(ToDoItem toDoItem)
     {
         this.toDoItem = toDoItem;
@@ -40,14 +42,15 @@ public class DeleteToDoDialog extends AlertDialog
         return this;
     }
 
-    public void setListener(DeleteDialogListener listener)
-    {
+    public void setListener(DeleteDialogListener listener) {
         this.listener = listener;
     }
 
-    private OnClickListener onPositive = new OnClickListener() {
+    private OnClickListener onPositive = new OnClickListener()
+    {
         @Override
-        public void onClick(DialogInterface dialog, int which) {
+        public void onClick(DialogInterface dialog, int which)
+        {
             if(listener != null)
             {
                 if(toDoItem == null)
@@ -57,4 +60,6 @@ public class DeleteToDoDialog extends AlertDialog
             }
         }
     };
+
+    /* ===============END OF CLASS=============== */
 }
