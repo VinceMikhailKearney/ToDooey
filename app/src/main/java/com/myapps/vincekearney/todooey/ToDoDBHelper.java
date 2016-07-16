@@ -70,7 +70,7 @@ public class ToDoDBHelper extends DBManager
                 Log.i(TAG, "Got To-Do with ID: " + toDoId);
             }
         }
-        else // We didn't fetch just ONE item.g
+        else // We didn't fetch just ONE item.
         {
             throw new IllegalStateException("Only supposed to fetch one. Count was -> " + cursor.getCount());
         }
