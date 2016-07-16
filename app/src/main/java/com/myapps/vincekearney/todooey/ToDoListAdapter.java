@@ -70,6 +70,7 @@ public class ToDoListAdapter extends BaseAdapter
     }
 
     // Basically the cell that we use in cellForRowAtIndexPath
+    // Todo - Only create a new ToDoViewHolder if we actually need to.
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
