@@ -12,6 +12,10 @@ import java.util.UUID;
 
 public class ToDoDBHelper extends DBManager
 {
+    public enum getOrDelete
+    {
+        FETCH_TODO,DELETE_TODO
+    }
     private static final String TAG = "ToDoDataBaseHelper";
 
     public ToDoDBHelper(Context context)
@@ -33,7 +37,7 @@ public class ToDoDBHelper extends DBManager
         thisDataBase().insert(ToDoDBHelper.TO_DO_ITEMS_TABlE, null, toDoValues);
         closeDBManger();
 
-        return getToDoAndDelete(toDoID, false); // This returns a to-do item.
+        return toDo(toDoID, getOrDelete.FETCH_TODO); // This returns a to-do item.
     }
 
     public void updateCompleted(String id, Boolean completed)
@@ -47,14 +51,14 @@ public class ToDoDBHelper extends DBManager
         thisDataBase().update(TO_DO_ITEMS_TABlE, newValues, searchString, null);
     }
 
-    public ToDoItem getToDoAndDelete(String id, Boolean delete)
+    public ToDoItem toDo(String id, getOrDelete state)
     {
         ToDoItem item = null;
         Cursor cursor = fetchSingleToDo(id);
         if (cursor.moveToFirst() && cursor.getCount() == 1)
         {
             String toDoId = cursor.getString(0);
-            if(delete)
+            if(state == getOrDelete.DELETE_TODO)
             {
                 Log.i(TAG, "Deleting to do with id - " + id);
                 thisDataBase().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_ID +" = \"" + toDoId +"\"", null);
