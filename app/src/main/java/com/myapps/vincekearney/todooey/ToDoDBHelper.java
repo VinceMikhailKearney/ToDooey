@@ -81,7 +81,7 @@ public class ToDoDBHelper extends DBManager
     }
 
     // Retrieving the list of To-Do items
-    public List<ToDoItem>  getAllToDos()
+    public List<ToDoItem> getAllToDos()
     {
         Log.i(TAG, "Asking for all ToDo items.");
 
@@ -101,6 +101,27 @@ public class ToDoDBHelper extends DBManager
         cursor.close();
         closeDBManger();
         return todos;
+    }
+
+    public List<ToDoItem> getToDos(Boolean completed)
+    {
+        List<ToDoItem> toDos = new ArrayList<>();
+        int completedAsInt = completed ? 1 : 0;
+        String searchString = String.format("%s%s%s","'",completedAsInt,"'");
+        String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE + " WHERE " + COLUMN_NAME_COMPLETED + " = " + searchString;
+        Cursor cursor = thisDataBase().rawQuery(query, null);
+        // Starting at the first row, continue to move until past the last row.
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast())
+        {
+            ToDoItem todo = createToDoFrom(cursor);
+            toDos.add(todo);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        closeDBManger();
+        return toDos;
     }
 
     // Retrieving the list of To-Do items
@@ -147,7 +168,6 @@ public class ToDoDBHelper extends DBManager
 
     public Cursor fetchSingleToDo(String id)
     {
-        // Query sets to select ALL from the To-Do table.
         String searchString = String.format("%s%s%s","'",id,"'");
         String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE + " WHERE " + COLUMN_NAME_TODO_ID + " = " + searchString;
         return thisDataBase().rawQuery(query, null);
