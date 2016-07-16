@@ -36,12 +36,25 @@ public class ToDoDBHelper extends DBManager
         return getToDo(text);
     }
 
+    public void updateCompleted(String text, Boolean completed)
+    {
+        Log.i(TAG, "ToDoText = " + text +"\nCompleted = " + completed);
+        ContentValues newValues = new ContentValues();
+        newValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, completed);
+
+        String searchString = String.format("%s = %s%s%s",ToDoDBHelper.COLUMN_NAME_TODO_TEXT,"'",text,"'");
+        Log.i(TAG, "Search string = " + searchString);
+        thisDataBase().update(TO_DO_ITEMS_TABlE, newValues, searchString, null);
+//        thisDataBase().update(TO_DO_ITEMS_TABlE, newValues, ToDoDBHelper.COLUMN_NAME_TODO_TEXT+"="+text, null);
+    }
+
     public ToDoItem getToDo(String text)
     {
         Log.i(TAG, "Asking for To-Do with text: " + text);
         // Query sets to select ALL from the To-Do table.
         String searchString = String.format("%s%s%s","'",text,"'");
         String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE + " WHERE " + COLUMN_NAME_TODO_TEXT + " = " + searchString;
+        Log.i(TAG, "The query for getting a to do: " + query);
         Cursor cursor = thisDataBase().rawQuery(query, null);
 
         if (cursor.moveToFirst() && cursor.getCount() == 1)
