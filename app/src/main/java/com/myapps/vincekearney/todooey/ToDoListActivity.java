@@ -34,15 +34,11 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_to_do_list);
         this.toDoList = (ListView) findViewById(R.id.toDoList);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         this.dbHelper = new ToDoDBHelper(this);
-
-        for(ToDoItem item : dbHelper.getAllToDos())
-            this.toDoListItems.add(item);
-
+        this.toDoListItems = dbHelper.getAllToDos();
         this.toDoAdapter = new ToDoListAdapter(this, this.toDoListItems);
         this.toDoAdapter.setToDoListAdapterListener(this);
         this.toDoList.setAdapter(this.toDoAdapter);
