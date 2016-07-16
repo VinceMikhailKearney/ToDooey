@@ -4,9 +4,10 @@ import java.util.Date;
 
 public class ToDoItem
 {
-    private String todoid;
+    /* ---- Properties ---- */
     private Boolean completed;
     private Date date;
+    private String todoid;
     private String todotext;
 
     public ToDoItem () {}

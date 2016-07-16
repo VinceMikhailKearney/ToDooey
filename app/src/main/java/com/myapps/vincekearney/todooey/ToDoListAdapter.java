@@ -18,7 +18,7 @@ import java.util.List;
 public class ToDoListAdapter extends BaseAdapter
 {
     private static final String TAG = "ToDoAdapter";
-
+    /* ---- Properties ---- */
     private LayoutInflater inflater;
     private List<ToDoItem> todoList;
     private ToDoListAdapterListener toDoListener;

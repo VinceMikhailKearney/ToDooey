@@ -24,7 +24,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
 {
     private final int TODO_ADDED = 1;
     private static final String TAG = "ToDoListActivity";
-
+    /* ---- Properties ---- */
     private ActionBar actionBar;
     private ActionBarDrawerToggle drawerToggle;
     private DeleteToDoDialog deleteToDoDialog;

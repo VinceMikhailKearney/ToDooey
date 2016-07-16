@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 
 public class DeleteToDoDialog extends AlertDialog
 {
+    /* ---- Properties ---- */
     private DeleteDialogListener listener;
     private ToDoItem toDoItem;
 

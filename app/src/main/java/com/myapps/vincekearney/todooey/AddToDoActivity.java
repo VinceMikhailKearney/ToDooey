@@ -11,7 +11,7 @@ import android.view.View;
 public class AddToDoActivity extends AppCompatActivity
 {
     public static final String ToDo_Desc = "todo";
-
+    /* ---- Properties ---- */
     private EditText descView;
 
     @Override
