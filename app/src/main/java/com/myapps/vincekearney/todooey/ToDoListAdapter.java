@@ -23,6 +23,7 @@ public class ToDoListAdapter extends BaseAdapter
     public interface ToDoListAdapterListener
     {
         void OnClickItem(ToDoItem item);
+        void DeleteItem(ToDoItem item);
     }
 
     public ToDoListAdapter(Context context, List<ToDoItem> items) {
@@ -41,7 +42,7 @@ public class ToDoListAdapter extends BaseAdapter
         this.toDoListener = listener;
     }
 
-    public class ToDoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+    public class ToDoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener
     {
         private ToDoItem toDoItem;
         protected CheckBox checkBox;
@@ -51,6 +52,7 @@ public class ToDoListAdapter extends BaseAdapter
             Log.i(TAG, "ToDoViewHolder");
             this.checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
             this.checkBox.setOnClickListener(this);
+            this.checkBox.setOnLongClickListener(this);
         }
 
         public void bind(ToDoItem item)
@@ -67,6 +69,13 @@ public class ToDoListAdapter extends BaseAdapter
                 Log.i(TAG, "onClick --> toDoListener is not null");
                 toDoListener.OnClickItem(this.toDoItem);
             }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if(toDoListener != null)
+                toDoListener.DeleteItem(this.toDoItem);
+            return false;
         }
     }
 

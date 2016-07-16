@@ -1,9 +1,11 @@
 package com.myapps.vincekearney.todooey;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 //import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -35,7 +37,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         // Here we are telling the app that we want to be full screen - I.e. The menu bar at the top is gone (date and battery thang).
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_to_do_list);
-        toDoList = (ListView) findViewById(R.id.toDoList);
+        this.toDoList = (ListView) findViewById(R.id.toDoList);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,11 +78,36 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         this.toDoAdapter.notifyDataSetChanged();
     }
 
+    // Delete single to do
+    private void delete(final ToDoItem toDoItem)
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ToDoListActivity.this);
+        alertDialogBuilder.setTitle(R.string.delete_to_do);
+        alertDialogBuilder
+                .setMessage(toDoItem.getTodotext())
+                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        toDoListItems.remove(toDoItem);
+                        toDoAdapter.notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).show();
+    }
+
     // Overriding of the ToDoListAdapaterListener method.
     @Override
     public void OnClickItem(ToDoItem item) {
         Log.i(TAG, "Clicked a check box and received listener event.");
         dbHelper.updateCompleted(item.getTodotext(), !item.getCompleted());
+    }
+
+    @Override
+    public void DeleteItem(ToDoItem item) {
+        this.delete(item);
     }
 
     // This is the callback when AddToDoActivity finishes - Passes an Intent with data that we can use.
