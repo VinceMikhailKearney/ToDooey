@@ -13,18 +13,14 @@ import java.util.UUID;
 
 public class ToDoDBHelper extends DBManager
 {
-    public enum getOrDelete
-    {
-        FETCH_TODO,DELETE_TODO
-    }
+    public enum getOrDelete { FETCH_TODO , DELETE_TODO }
     private static final String TAG = "ToDoDataBaseHelper";
 
-    public ToDoDBHelper(Context context)
-    {
+    public ToDoDBHelper(Context context) {
         super(context);
     }
 
-    // Adding a To-Do item
+    /* ---- Adding methods ---- */
     public ToDoItem addToDo(String text)
     {
         Log.i(TAG, "Adding a ToDo item.");
@@ -42,6 +38,7 @@ public class ToDoDBHelper extends DBManager
         return toDo(toDoID, getOrDelete.FETCH_TODO);
     }
 
+    /* ---- Update methods ---- */
     public void updateCompleted(String id, Boolean completed)
     {
         Log.i(TAG, "ToDo ID: " + id +"\nCompleted: " + completed);
@@ -52,6 +49,7 @@ public class ToDoDBHelper extends DBManager
         thisDataBase().update(TO_DO_ITEMS_TABlE, newValues, searchString, null);
     }
 
+    /* ---- Fetch/Delete Single To-Do ---- */
     public ToDoItem toDo(String id, getOrDelete state)
     {
         ToDoItem item = null;
@@ -80,37 +78,28 @@ public class ToDoDBHelper extends DBManager
         return item;
     }
 
-    // Retrieving the list of To-Do items
+    /* ---- Fetch methods ---- */
     public List<ToDoItem> getAllToDos()
     {
         Log.i(TAG, "Asking for all ToDo items.");
-
-        List<ToDoItem> todos = new ArrayList<>();
         // Query sets to select ALL from the To-Do table.
         String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE;
-        Cursor cursor = thisDataBase().rawQuery(query, null);
-        // Starting at the first row, continue to move until past the last row.
-        cursor.moveToFirst();
-        while(!cursor.isAfterLast())
-        {
-            ToDoItem todo = createToDoFrom(cursor);
-            todos.add(todo);
-            cursor.moveToNext();
-        }
-
-        cursor.close();
-        closeDBManger();
-        return todos;
+        return fetchToDoItemsWithQuery(query);
     }
 
     public List<ToDoItem> getToDos(Boolean completed)
     {
         Log.i(TAG, "Asking for todos completed: " + completed);
-
-        List<ToDoItem> toDos = new ArrayList<>();
+        // Query sets to select ALL from the To-Do table that are completed/not
         int completedAsInt = completed ? 1 : 0;
         String searchString = String.format("%s%s%s","'",completedAsInt,"'");
         String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE + " WHERE " + COLUMN_NAME_COMPLETED + " = " + searchString;
+        return fetchToDoItemsWithQuery(query);
+    }
+
+    private List<ToDoItem> fetchToDoItemsWithQuery(String query)
+    {
+        List<ToDoItem> toDos = new ArrayList<>();
         Cursor cursor = thisDataBase().rawQuery(query, null);
         // Starting at the first row, continue to move until past the last row.
         cursor.moveToFirst();
@@ -121,14 +110,12 @@ public class ToDoDBHelper extends DBManager
             cursor.moveToNext();
         }
 
-        Log.i(TAG, "The completed(" + completed + ") to do items are: " + toDos);
-
         cursor.close();
         closeDBManger();
         return toDos;
     }
 
-    // Retrieving the list of To-Do items
+    /* ---- Delete methods ---- */
     public void deleteAllToDos()
     {
         // Query sets to select ALL from the To-Do table.
@@ -148,6 +135,7 @@ public class ToDoDBHelper extends DBManager
         closeDBManger();
     }
 
+    /* ---- Convenience methods ---- */
     public ToDoItem createToDoFrom(Cursor cursor)
     {
         ToDoItem todo = new ToDoItem();
@@ -158,14 +146,11 @@ public class ToDoDBHelper extends DBManager
         return todo;
     }
 
-    // Convenience methods
-    public SQLiteDatabase thisDataBase()
-    {
+    public SQLiteDatabase thisDataBase() {
         return super.getWritableDatabase();
     }
 
-    public void closeDBManger()
-    {
+    public void closeDBManger() {
         // Need to close down the DBManager (SQLiteOpenHelper).
         super.close();
     }
@@ -177,5 +162,5 @@ public class ToDoDBHelper extends DBManager
         return thisDataBase().rawQuery(query, null);
     }
 
-    //==============================END OF CLASS==============================
+    /* ===============END OF CLASS=============== */
 }
