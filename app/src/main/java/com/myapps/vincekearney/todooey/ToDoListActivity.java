@@ -76,6 +76,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     @Override
     public void OnClickItem(ToDoItem item) {
         Log.i(TAG, "Clicked a check box and received listener event.");
+        dbHelper.updateCompleted(item.getTodotext(), !item.getCompleted());
     }
 
     // This is the callback when AddToDoActivity finishes - Passes an Intent with data that we can use.

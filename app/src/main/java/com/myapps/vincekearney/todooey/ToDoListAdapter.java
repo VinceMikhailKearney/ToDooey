@@ -14,10 +14,9 @@ import java.util.List;
 public class ToDoListAdapter extends BaseAdapter
 {
     private static final String TAG = "ToDoAdapter";
-    private Context myContext;
-    private LayoutInflater myInflater;
-    private List<ToDoItem> myDataSource;
-    private CheckBox toDoCheckBox;
+    private Context context;
+    private LayoutInflater inflater;
+    private List<ToDoItem> dataSource;
 
     private ToDoListAdapterListener toDoListener;
 
@@ -27,9 +26,9 @@ public class ToDoListAdapter extends BaseAdapter
     }
 
     public ToDoListAdapter(Context context, List<ToDoItem> items) {
-        myContext = context;
-        myDataSource = items;
-        myInflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.context = context;
+        this.dataSource = items;
+        this.inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public void setToDoListAdapterListener(ToDoListAdapterListener listener)
@@ -44,22 +43,19 @@ public class ToDoListAdapter extends BaseAdapter
 
         public ToDoViewHolder(View itemView) {
             super(itemView);
-            Log.i(TAG, "ToDoViewHolder");
             this.checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
             this.checkBox.setOnClickListener(this);
         }
 
         public void bind(ToDoItem item)
         {
-            Log.i(TAG, "bind");
             this.toDoItem = item;
-            checkBox.setChecked(item.getCompleted());
-            checkBox.setText(item.getTodotext());
+            this.checkBox.setChecked(item.getCompleted());
+            this.checkBox.setText(item.getTodotext());
         }
 
         @Override
         public void onClick(View v) {
-            Log.i(TAG, "onClick");
             if(toDoListener != null) {
                 Log.i(TAG, "onClick --> toDoListener is not null");
                 toDoListener.OnClickItem(this.toDoItem);
@@ -70,15 +66,14 @@ public class ToDoListAdapter extends BaseAdapter
     // Essentially numberOfRowsInSection
     @Override
     public int getCount() {
-        return myDataSource.size();
+        return this.dataSource.size();
     }
 
     // Basically the cell that we use in cellForRowAtIndexPath
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        Log.i(TAG, "getView");
-        RecyclerView.ViewHolder holder = new ToDoViewHolder(myInflater.inflate(R.layout.to_do_list_row, parent, false));
+        RecyclerView.ViewHolder holder = new ToDoViewHolder(this.inflater.inflate(R.layout.to_do_list_row, parent, false));
         convertView = holder.itemView;
         ((ToDoViewHolder) holder).bind((ToDoItem) getItem(position));
         return convertView;
@@ -93,6 +88,6 @@ public class ToDoListAdapter extends BaseAdapter
     // This just pulls out the object that we want for the row we're filling in from the data source we passed in.
     @Override
     public Object getItem(int position) {
-        return myDataSource.get(position);
+        return this.dataSource.get(position);
     }
 }
