@@ -3,7 +3,6 @@ package com.myapps.vincekearney.todooey;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 //import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,10 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,25 +46,13 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         this.toDoAdapter = new ToDoListAdapter(this, this.toDoListItems);
         this.toDoAdapter.setToDoListAdapterListener(this);
         this.toDoList.setAdapter(this.toDoAdapter);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        if(fab != null) // Ensure the FAB has been created before adding a listener - Threw an error otherwise.
-        {
-            fab.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view) {
-                    Intent addToDoIntent = new Intent(ToDoListActivity.this, AddToDoActivity.class);
-                    startActivityForResult(addToDoIntent,TODO_ADDED);
-                    // We are using the above so that the activity that we launch
-                    // within this result gets passed data back. We can use information like
-                    // this for certain things - Here we are using it to determine whether a To-Do
-                    // item was added or not.
-                }
-            });
-        }
     }
 
+    public void startIntent(View view)
+    {
+        Intent addToDoIntent = new Intent(ToDoListActivity.this, AddToDoActivity.class);
+        startActivityForResult(addToDoIntent,TODO_ADDED);
+    }
     // My on click events
     public void deleteAllToDoItems(View view)
     {
