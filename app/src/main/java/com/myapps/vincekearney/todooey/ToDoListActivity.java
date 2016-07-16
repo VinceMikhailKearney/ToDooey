@@ -94,8 +94,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         {
             // Get the string value that has the ID entered in the parameter.
             String toDo = data.getStringExtra(AddToDoActivity.ToDo_Desc);
-            dbHelper.addToDo("1",toDo,false);
-            this.toDoListItems.add(dbHelper.getToDo(toDo));
+            this.toDoListItems.add(dbHelper.addToDo("1",toDo,false));
         }
     }
 
