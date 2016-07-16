@@ -32,7 +32,7 @@ public class ToDoDBHelper extends DBManager
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, 0);
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_DATE, Long.toString(new Date().getTime()));
 
-        thisDataBase().insert(ToDoDBHelper.TO_DO_ITEMS_TABlE, null, toDoValues);
+        openThisDB().insert(ToDoDBHelper.TO_DO_ITEMS_TABlE, null, toDoValues);
         closeDBManger();
 
         return toDo(toDoID, getOrDelete.FETCH_TODO);
@@ -46,7 +46,7 @@ public class ToDoDBHelper extends DBManager
         newValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, completed);
 
         String searchString = String.format("%s = %s%s%s",ToDoDBHelper.COLUMN_NAME_TODO_ID,"'",id,"'");
-        thisDataBase().update(TO_DO_ITEMS_TABlE, newValues, searchString, null);
+        openThisDB().update(TO_DO_ITEMS_TABlE, newValues, searchString, null);
     }
 
     /* ---- Fetch/Delete Single To-Do ---- */
@@ -60,7 +60,7 @@ public class ToDoDBHelper extends DBManager
             if(state == getOrDelete.DELETE_TODO)
             {
                 Log.i(TAG, "Deleting to do with ID: " + id);
-                thisDataBase().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_ID +" = \"" + toDoId +"\"", null);
+                openThisDB().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_ID +" = \"" + toDoId +"\"", null);
             }
             else
             {
@@ -100,7 +100,7 @@ public class ToDoDBHelper extends DBManager
     private List<ToDoItem> fetchToDoItemsWithQuery(String query)
     {
         List<ToDoItem> toDos = new ArrayList<>();
-        Cursor cursor = thisDataBase().rawQuery(query, null);
+        Cursor cursor = openThisDB().rawQuery(query, null);
         // Starting at the first row, continue to move until past the last row.
         cursor.moveToFirst();
         while(!cursor.isAfterLast())
@@ -120,14 +120,14 @@ public class ToDoDBHelper extends DBManager
     {
         // Query sets to select ALL from the To-Do table.
         String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE;
-        Cursor cursor = thisDataBase().rawQuery(query, null);
+        Cursor cursor = openThisDB().rawQuery(query, null);
         // Starting at the first row, continue to move until past the last row.
         cursor.moveToFirst();
         while(!cursor.isAfterLast())
         {
             String toDoId = cursor.getString(0);
             Log.i(TAG, "Deleting all to do's. This ID - " + toDoId);
-            thisDataBase().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_ID +" = \"" + toDoId +"\"", null);
+            openThisDB().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_ID +" = \"" + toDoId +"\"", null);
             cursor.moveToNext();
         }
 
@@ -146,7 +146,7 @@ public class ToDoDBHelper extends DBManager
         return todo;
     }
 
-    public SQLiteDatabase thisDataBase() {
+    public SQLiteDatabase openThisDB() {
         return super.getWritableDatabase();
     }
 
@@ -159,7 +159,7 @@ public class ToDoDBHelper extends DBManager
     {
         String searchString = String.format("%s%s%s","'",id,"'");
         String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE + " WHERE " + COLUMN_NAME_TODO_ID + " = " + searchString;
-        return thisDataBase().rawQuery(query, null);
+        return openThisDB().rawQuery(query, null);
     }
 
     /* ===============END OF CLASS=============== */
