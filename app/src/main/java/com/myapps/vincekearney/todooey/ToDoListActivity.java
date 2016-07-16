@@ -87,6 +87,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
                 .setMessage(toDoItem.getTodotext())
                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        dbHelper.deleteToDo(toDoItem.getId());
                         toDoListItems.remove(toDoItem);
                         toDoAdapter.notifyDataSetChanged();
                     }
@@ -102,7 +103,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     @Override
     public void OnClickItem(ToDoItem item) {
         Log.i(TAG, "Clicked a check box and received listener event.");
-        dbHelper.updateCompleted(item.getTodotext(), !item.getCompleted());
+        dbHelper.updateCompleted(item.getId(), !item.getCompleted());
     }
 
     @Override
@@ -121,7 +122,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         {
             // Get the string value that has the ID entered in the parameter.
             String toDo = data.getStringExtra(AddToDoActivity.ToDo_Desc);
-            this.toDoListItems.add(dbHelper.addToDo("1",toDo,false));
+            this.toDoListItems.add(dbHelper.addToDo(toDo));
         }
     }
 

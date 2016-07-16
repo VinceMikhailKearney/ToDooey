@@ -8,6 +8,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ToDoDBHelper extends DBManager
 {
@@ -19,38 +20,39 @@ public class ToDoDBHelper extends DBManager
     }
 
     // Adding a To-Do item
-    public ToDoItem addToDo(String id, String text, Boolean completed)
+    public ToDoItem addToDo(String text)
     {
         Log.i(TAG, "Adding a ToDo item.");
 
+        String toDoID = UUID.randomUUID().toString();
         ContentValues toDoValues = new ContentValues();
-        toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_ID, id); // Do I need? I can delete based upon text.
+        toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_ID, toDoID); // Do I need? I can delete based upon text.
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_TEXT, text);
-        toDoValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, completed ? 1 : 0);
+        toDoValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, 0);
 
         thisDataBase().insert(ToDoDBHelper.TO_DO_ITEMS_TABlE, null, toDoValues);
         closeDBManger();
 
-        return getToDo(text);
+        return getToDo(toDoID);
     }
 
-    public void updateCompleted(String text, Boolean completed)
+    public void updateCompleted(String id, Boolean completed)
     {
-        Log.i(TAG, "ToDoText = " + text +"\nCompleted = " + completed);
+        Log.i(TAG, "ToDo ID = " + id +"\nCompleted = " + completed);
         ContentValues newValues = new ContentValues();
         newValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, completed);
 
-        String searchString = String.format("%s = %s%s%s",ToDoDBHelper.COLUMN_NAME_TODO_TEXT,"'",text,"'");
+        String searchString = String.format("%s = %s%s%s",ToDoDBHelper.COLUMN_NAME_TODO_ID,"'",id,"'");
         Log.i(TAG, "Search string = " + searchString);
         thisDataBase().update(TO_DO_ITEMS_TABlE, newValues, searchString, null);
     }
 
-    public ToDoItem getToDo(String text)
+    public ToDoItem getToDo(String id)
     {
-        Log.i(TAG, "Asking for To-Do with text: " + text);
+        Log.i(TAG, "Asking for To-Do with ID: " + id);
         // Query sets to select ALL from the To-Do table.
-        String searchString = String.format("%s%s%s","'",text,"'");
-        String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE + " WHERE " + COLUMN_NAME_TODO_TEXT + " = " + searchString;
+        String searchString = String.format("%s%s%s","'",id,"'");
+        String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE + " WHERE " + COLUMN_NAME_TODO_ID + " = " + searchString;
         Log.i(TAG, "The query for getting a to do: " + query);
         Cursor cursor = thisDataBase().rawQuery(query, null);
 
@@ -102,14 +104,37 @@ public class ToDoDBHelper extends DBManager
         cursor.moveToFirst();
         while(!cursor.isAfterLast())
         {
-            String text = cursor.getString(1);
-            Log.i(TAG, "String - " + text);
-            thisDataBase().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_TEXT +" = \"" + text +"\"", null);
+            String toDoId = cursor.getString(0);
+            Log.i(TAG, "Deleting all to do's. This ID - " + toDoId);
+            thisDataBase().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_ID +" = \"" + toDoId +"\"", null);
             cursor.moveToNext();
         }
 
         cursor.close();
         closeDBManger();
+    }
+
+    public void deleteToDo(String id)
+    {
+        Log.i(TAG, "Asking for To-Do with ID: " + id);
+        // Query sets to select ALL from the To-Do table.
+        String searchString = String.format("%s%s%s","'",id,"'");
+        String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE + " WHERE " + COLUMN_NAME_TODO_ID + " = " + searchString;
+        Log.i(TAG, "The query for getting a to do: " + query);
+        Cursor cursor = thisDataBase().rawQuery(query, null);
+
+        if (cursor.moveToFirst() && cursor.getCount() == 1)
+        {
+            String toDoId = cursor.getString(0);
+            Log.i(TAG, "Deleting to do with id - " + id);
+            thisDataBase().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_ID +" = \"" + toDoId +"\"", null);
+            cursor.close();
+            closeDBManger();
+        }
+        else // The count was greater than 1
+        {
+            throw new IllegalStateException("Only supposed to fetch one. Count was -> " + cursor.getCount());
+        }
     }
 
     public ToDoItem createToDoFrom(Cursor cursor)
