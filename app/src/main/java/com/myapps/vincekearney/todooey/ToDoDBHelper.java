@@ -49,16 +49,11 @@ public class ToDoDBHelper extends DBManager
 
     public ToDoItem getToDo(String id)
     {
-        Log.i(TAG, "Asking for To-Do with ID: " + id);
-        // Query sets to select ALL from the To-Do table.
-        String searchString = String.format("%s%s%s","'",id,"'");
-        String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE + " WHERE " + COLUMN_NAME_TODO_ID + " = " + searchString;
-        Log.i(TAG, "The query for getting a to do: " + query);
-        Cursor cursor = thisDataBase().rawQuery(query, null);
-
+        Cursor cursor = fetchSingleToDo(id);
         if (cursor.moveToFirst() && cursor.getCount() == 1)
         {
             ToDoItem item = createToDoFrom(cursor);
+            Log.i(TAG, "Got To-Do with ID: " + cursor.getString(0));
             cursor.close();
             closeDBManger();
             return item;
@@ -116,13 +111,7 @@ public class ToDoDBHelper extends DBManager
 
     public void deleteToDo(String id)
     {
-        Log.i(TAG, "Asking for To-Do with ID: " + id);
-        // Query sets to select ALL from the To-Do table.
-        String searchString = String.format("%s%s%s","'",id,"'");
-        String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE + " WHERE " + COLUMN_NAME_TODO_ID + " = " + searchString;
-        Log.i(TAG, "The query for getting a to do: " + query);
-        Cursor cursor = thisDataBase().rawQuery(query, null);
-
+        Cursor cursor = fetchSingleToDo(id);
         if (cursor.moveToFirst() && cursor.getCount() == 1)
         {
             String toDoId = cursor.getString(0);
@@ -157,6 +146,14 @@ public class ToDoDBHelper extends DBManager
     {
         // Need to close down the DBManager (SQLiteOpenHelper).
         super.close();
+    }
+
+    public Cursor fetchSingleToDo(String id)
+    {
+        // Query sets to select ALL from the To-Do table.
+        String searchString = String.format("%s%s%s","'",id,"'");
+        String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE + " WHERE " + COLUMN_NAME_TODO_ID + " = " + searchString;
+        return thisDataBase().rawQuery(query, null);
     }
 
     //==============================END OF CLASS==============================
