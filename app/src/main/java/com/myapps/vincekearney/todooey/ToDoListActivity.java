@@ -95,6 +95,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG, "Got a result back from the add activity.");
         // We need to make sure the requestCode matches the task that we asked for above.
         // If result is OK - We have something we need to look at.
         if (requestCode == TODO_ADDED && resultCode == RESULT_OK)
