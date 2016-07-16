@@ -155,9 +155,8 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         this.drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String format = ("Show to dos for position: " + position);
-                Toast.makeText(ToDoListActivity.this, format, Toast.LENGTH_SHORT).show();
                 refreshToDos(position);
+                drawerLayout.closeDrawers();
             }
         });
     }
