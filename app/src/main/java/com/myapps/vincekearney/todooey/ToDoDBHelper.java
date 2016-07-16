@@ -105,6 +105,8 @@ public class ToDoDBHelper extends DBManager
 
     public List<ToDoItem> getToDos(Boolean completed)
     {
+        Log.i(TAG, "Asking for todos completed: " + completed);
+
         List<ToDoItem> toDos = new ArrayList<>();
         int completedAsInt = completed ? 1 : 0;
         String searchString = String.format("%s%s%s","'",completedAsInt,"'");
@@ -118,6 +120,8 @@ public class ToDoDBHelper extends DBManager
             toDos.add(todo);
             cursor.moveToNext();
         }
+
+        Log.i(TAG, "The completed(" + completed + ") to do items are: " + toDos);
 
         cursor.close();
         closeDBManger();

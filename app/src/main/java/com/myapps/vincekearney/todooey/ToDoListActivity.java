@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapter.ToDoListAdapterListener, DeleteToDoDialog.DeleteDialogListener
 {
@@ -84,6 +85,18 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         this.deleteToDoDialog.setDialogToDo(null).show();
     }
 
+    public void refreshToDos(int position)
+    {
+        this.toDoListItems = dbHelper.getAllToDos();
+        if(position == 1)
+            this.toDoListItems = dbHelper.getToDos(true);
+        else if(position == 2)
+            this.toDoListItems = dbHelper.getToDos(false);
+
+        this.toDoAdapter.setToDoList(this.toDoListItems);
+        this.toDoAdapter.notifyDataSetChanged();
+    }
+
     // ToDoListAdapterListener methods
     @Override
     public void OnClickItem(ToDoItem item) {
@@ -142,7 +155,9 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         this.drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(ToDoListActivity.this, "We want to change the to do's we show", Toast.LENGTH_SHORT).show();
+                String format = ("Show to dos for position: " + position);
+                Toast.makeText(ToDoListActivity.this, format, Toast.LENGTH_SHORT).show();
+                refreshToDos(position);
             }
         });
     }
