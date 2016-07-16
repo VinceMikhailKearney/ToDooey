@@ -2,6 +2,7 @@ package com.myapps.vincekearney.todooey;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 //import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -127,6 +128,11 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
             return true;
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     //==============================END OF CLASS==============================
