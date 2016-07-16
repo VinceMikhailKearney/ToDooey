@@ -33,7 +33,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     private String activityTitle;
     private ToDoDBHelper dbHelper;
     private ToDoListAdapter toDoAdapter;
-    
+
     /* --- Lifecycle methods ---- */
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -239,5 +239,5 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         }
     }
 
-    //==============================END OF CLASS==============================
+    /* ===============END OF CLASS=============== */
 }

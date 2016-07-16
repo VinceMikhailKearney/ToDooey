@@ -18,79 +18,34 @@ import java.util.List;
 public class ToDoListAdapter extends BaseAdapter
 {
     private static final String TAG = "ToDoAdapter";
-    private Context context;
+
     private LayoutInflater inflater;
     private List<ToDoItem> todoList;
-
     private ToDoListAdapterListener toDoListener;
 
+    // The interface (or protocol in iOS) that states the methods the listener implements.
     public interface ToDoListAdapterListener
     {
         void OnClickItem(ToDoItem item);
         void DeleteItem(ToDoItem item);
     }
 
-    public ToDoListAdapter(Context context, List<ToDoItem> items) {
-        this.context = context;
+    /* ---- Constructor and setter methods ---- */
+    public ToDoListAdapter(Context context, List<ToDoItem> items)
+    {
         this.todoList = items;
-        this.inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void setToDoList(List<ToDoItem> list)
-    {
+    public void setToDoList(List<ToDoItem> list) {
         this.todoList = list;
     }
 
-    public void setToDoListAdapterListener(ToDoListAdapterListener listener)
-    {
+    public void setToDoListAdapterListener(ToDoListAdapterListener listener) {
         this.toDoListener = listener;
     }
 
-    public class ToDoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener
-    {
-        private ToDoItem toDoItem;
-        protected CheckBox checkBox;
-        protected TextView date;
-
-        public ToDoViewHolder(View itemView) {
-            super(itemView);
-            Log.i(TAG, "ToDoViewHolder");
-            this.checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
-            this.date = (TextView) itemView.findViewById(R.id.dateText);
-            this.checkBox.setOnClickListener(this);
-            this.checkBox.setOnLongClickListener(this);
-        }
-
-        public void bind(ToDoItem item)
-        {
-            Log.i(TAG, "bind");
-            this.toDoItem = item;
-            this.checkBox.setChecked(item.getCompleted());
-            this.checkBox.setText(item.getTodotext());
-            this.date.setText(formatDate(this.toDoItem.getDate()));
-        }
-
-        @Override
-        public void onClick(View v) {
-            if(toDoListener != null) {
-                Log.i(TAG, "onClick --> toDoListener is not null");
-                toDoListener.OnClickItem(this.toDoItem);
-            }
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            if(toDoListener != null)
-                toDoListener.DeleteItem(this.toDoItem);
-            return false;
-        }
-
-        private String formatDate(Date newDate)
-        {
-            return DateUtils.formatSameDayTime(newDate.getTime(), (new Date().getTime()), DateFormat.SHORT, DateFormat.SHORT).toString();
-        }
-    }
-
+    /* ---- Adapter populating and data methods ---- */
     // Essentially numberOfRowsInSection
     @Override
     public int getCount() {
@@ -109,9 +64,7 @@ public class ToDoListAdapter extends BaseAdapter
             holder = new ToDoViewHolder(this.inflater.inflate(R.layout.to_do_list_row, parent, false));
             convertView = holder.itemView;
             convertView.setTag(holder);
-        }
-        else
-        {
+        } else {
             holder = (ToDoViewHolder) convertView.getTag();
         }
 
@@ -130,4 +83,59 @@ public class ToDoListAdapter extends BaseAdapter
     public Object getItem(int position) {
         return this.todoList.get(position);
     }
+
+    /* ---- A ViewHolder class that simplifies and improves efficiency of setting up views for the ListView ---- */
+    public class ToDoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener
+    {
+        protected CheckBox checkBox;
+        protected TextView date;
+        private ToDoItem toDoItem;
+
+        /* ---- Constructor ---- */
+        public ToDoViewHolder(View itemView)
+        {
+            super(itemView);
+            Log.i(TAG, "ToDoViewHolder");
+            this.checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
+            this.date = (TextView) itemView.findViewById(R.id.dateText);
+            this.checkBox.setOnClickListener(this);
+            this.checkBox.setOnLongClickListener(this);
+        }
+
+        public void bind(ToDoItem item)
+        {
+            Log.i(TAG, "bind");
+            this.toDoItem = item;
+            this.checkBox.setChecked(item.getCompleted());
+            this.checkBox.setText(item.getTodotext());
+            this.date.setText(formatDate(this.toDoItem.getDate()));
+        }
+
+        /* ---- OnClick/LongClick Listener methods ---- */
+        @Override
+        public void onClick(View v)
+        {
+            if(toDoListener != null) {
+                Log.i(TAG, "onClick --> toDoListener is not null");
+                toDoListener.OnClickItem(this.toDoItem);
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View v)
+        {
+            if(toDoListener != null)
+                toDoListener.DeleteItem(this.toDoItem);
+            return false;
+        }
+
+        /* ---- Helper method ---- */
+        private String formatDate(Date newDate) {
+            return DateUtils.formatSameDayTime(newDate.getTime(), (new Date().getTime()), DateFormat.SHORT, DateFormat.SHORT).toString();
+        }
+
+        /* ===============END OF VIEW HOLDER CLASS=============== */
+    }
+
+    /* ===============END OF CLASS=============== */
 }

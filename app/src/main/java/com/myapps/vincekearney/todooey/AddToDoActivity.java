@@ -8,17 +8,23 @@ import android.view.KeyEvent;
 import android.widget.EditText;
 import android.view.View;
 
-public class AddToDoActivity extends AppCompatActivity {
-
+public class AddToDoActivity extends AppCompatActivity
+{
     public static final String ToDo_Desc = "todo";
 
     private EditText descView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+
+        // Set content view and assign desc view
         setContentView(R.layout.activity_add_to_do);
         this.descView = (EditText) findViewById(R.id.toDoText);
+
+        // Add an OnKeyListener to the descView.
+        // This essentially adds a listener to any key press on the keyboard. I am interested if the 'Enter' button is pressed down.
         this.descView.setOnKeyListener(new View.OnKeyListener()
         {
             public boolean onKey(View v, int keyCode, KeyEvent event)
@@ -58,5 +64,6 @@ public class AddToDoActivity extends AppCompatActivity {
         // Destroy the activity - We are done with it.
         finish();
     }
-    //==============================END OF CLASS==============================
+
+    /* ===============END OF CLASS=============== */
 }
