@@ -30,20 +30,16 @@ public class ToDoDBHelper extends DBManager
         Log.i(TAG, "Adding a ToDo item.");
 
         String toDoID = UUID.randomUUID().toString();
-        Date toDoDate = new Date();
-        Log.i(TAG, "[DATE] To do date: " + toDoDate.getTime());
         ContentValues toDoValues = new ContentValues();
-        toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_ID, toDoID); // Do I need? I can delete based upon text.
+        toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_ID, toDoID);
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_TEXT, text);
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, 0);
-        toDoValues.put(ToDoDBHelper.COLUMN_NAME_DATE, Long.toString(toDoDate.getTime()));
+        toDoValues.put(ToDoDBHelper.COLUMN_NAME_DATE, Long.toString(new Date().getTime()));
 
         thisDataBase().insert(ToDoDBHelper.TO_DO_ITEMS_TABlE, null, toDoValues);
         closeDBManger();
 
-        Log.i(TAG, "[DATE] All ToDos: " + getAllToDos().toString());
-
-        return toDo(toDoID, getOrDelete.FETCH_TODO); // This returns a to-do item.
+        return toDo(toDoID, getOrDelete.FETCH_TODO);
     }
 
     public void updateCompleted(String id, Boolean completed)
@@ -53,7 +49,6 @@ public class ToDoDBHelper extends DBManager
         newValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, completed);
 
         String searchString = String.format("%s = %s%s%s",ToDoDBHelper.COLUMN_NAME_TODO_ID,"'",id,"'");
-        Log.i(TAG, "Search string: " + searchString);
         thisDataBase().update(TO_DO_ITEMS_TABlE, newValues, searchString, null);
     }
 
@@ -66,7 +61,7 @@ public class ToDoDBHelper extends DBManager
             String toDoId = cursor.getString(0);
             if(state == getOrDelete.DELETE_TODO)
             {
-                Log.i(TAG, "Deleting to do with id: " + id);
+                Log.i(TAG, "Deleting to do with ID: " + id);
                 thisDataBase().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_ID +" = \"" + toDoId +"\"", null);
             }
             else
@@ -111,8 +106,6 @@ public class ToDoDBHelper extends DBManager
     // Retrieving the list of To-Do items
     public void deleteAllToDos()
     {
-        Log.i(TAG, "Deleting all to do items.");
-
         // Query sets to select ALL from the To-Do table.
         String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE;
         Cursor cursor = thisDataBase().rawQuery(query, null);
@@ -136,7 +129,6 @@ public class ToDoDBHelper extends DBManager
         todo.setId(cursor.getString(0));
         todo.setTodotext(cursor.getString(1));
         todo.setCompleted(cursor.getInt(2) == 1);
-        Log.i(TAG, "[DATE] Cursor time: " + cursor.getString(3));
         todo.setDate(new Date(Long.parseLong(cursor.getString(3))));
         return todo;
     }
