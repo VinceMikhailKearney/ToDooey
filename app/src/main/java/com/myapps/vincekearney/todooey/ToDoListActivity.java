@@ -151,7 +151,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
             default:
                 break;
         }
-        
+
         this.toDoAdapter.setToDoList(this.toDoListItems);
         this.toDoAdapter.notifyDataSetChanged();
     }
@@ -197,7 +197,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         };
 
         this.drawerToggle.setDrawerIndicatorEnabled(true);
-        this.drawerLayout.setDrawerListener(this.drawerToggle);
+        this.drawerLayout.addDrawerListener(this.drawerToggle);
     }
 
     /* ---- ToDoListAdapterListener methods ---- */
