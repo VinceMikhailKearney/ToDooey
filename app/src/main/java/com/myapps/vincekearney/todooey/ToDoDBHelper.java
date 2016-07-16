@@ -6,12 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 public class ToDoDBHelper extends DBManager
@@ -33,28 +30,30 @@ public class ToDoDBHelper extends DBManager
         Log.i(TAG, "Adding a ToDo item.");
 
         String toDoID = UUID.randomUUID().toString();
+        Date toDoDate = new Date();
+        Log.i(TAG, "[DATE] To do date: " + toDoDate.getTime());
         ContentValues toDoValues = new ContentValues();
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_ID, toDoID); // Do I need? I can delete based upon text.
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_TEXT, text);
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, 0);
-        toDoValues.put(ToDoDBHelper.COLUMN_NAME_DATE, (new Date().getTime()));
+        toDoValues.put(ToDoDBHelper.COLUMN_NAME_DATE, Long.toString(toDoDate.getTime()));
 
         thisDataBase().insert(ToDoDBHelper.TO_DO_ITEMS_TABlE, null, toDoValues);
         closeDBManger();
 
-        Log.i(TAG, getAllToDos().toString());
+        Log.i(TAG, "[DATE] All ToDos: " + getAllToDos().toString());
 
         return toDo(toDoID, getOrDelete.FETCH_TODO); // This returns a to-do item.
     }
 
     public void updateCompleted(String id, Boolean completed)
     {
-        Log.i(TAG, "ToDo ID = " + id +"\nCompleted = " + completed);
+        Log.i(TAG, "ToDo ID: " + id +"\nCompleted: " + completed);
         ContentValues newValues = new ContentValues();
         newValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, completed);
 
         String searchString = String.format("%s = %s%s%s",ToDoDBHelper.COLUMN_NAME_TODO_ID,"'",id,"'");
-        Log.i(TAG, "Search string = " + searchString);
+        Log.i(TAG, "Search string: " + searchString);
         thisDataBase().update(TO_DO_ITEMS_TABlE, newValues, searchString, null);
     }
 
@@ -67,7 +66,7 @@ public class ToDoDBHelper extends DBManager
             String toDoId = cursor.getString(0);
             if(state == getOrDelete.DELETE_TODO)
             {
-                Log.i(TAG, "Deleting to do with id - " + id);
+                Log.i(TAG, "Deleting to do with id: " + id);
                 thisDataBase().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_ID +" = \"" + toDoId +"\"", null);
             }
             else
@@ -137,7 +136,8 @@ public class ToDoDBHelper extends DBManager
         todo.setId(cursor.getString(0));
         todo.setTodotext(cursor.getString(1));
         todo.setCompleted(cursor.getInt(2) == 1);
-        todo.setDate(new Date(cursor.getInt(3)));
+        Log.i(TAG, "[DATE] Cursor time: " + cursor.getString(3));
+        todo.setDate(new Date(Long.parseLong(cursor.getString(3))));
         return todo;
     }
 

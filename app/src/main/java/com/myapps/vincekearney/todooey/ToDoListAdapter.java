@@ -2,14 +2,21 @@ package com.myapps.vincekearney.todooey;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ToDoListAdapter extends BaseAdapter
 {
@@ -46,11 +53,13 @@ public class ToDoListAdapter extends BaseAdapter
     {
         private ToDoItem toDoItem;
         protected CheckBox checkBox;
+        protected TextView date;
 
         public ToDoViewHolder(View itemView) {
             super(itemView);
             Log.i(TAG, "ToDoViewHolder");
             this.checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
+            this.date = (TextView) itemView.findViewById(R.id.dateText);
             this.checkBox.setOnClickListener(this);
             this.checkBox.setOnLongClickListener(this);
         }
@@ -61,6 +70,7 @@ public class ToDoListAdapter extends BaseAdapter
             this.toDoItem = item;
             this.checkBox.setChecked(item.getCompleted());
             this.checkBox.setText(item.getTodotext());
+            this.date.setText(formatDate(this.toDoItem.getDate()));
         }
 
         @Override
@@ -76,6 +86,27 @@ public class ToDoListAdapter extends BaseAdapter
             if(toDoListener != null)
                 toDoListener.DeleteItem(this.toDoItem);
             return false;
+        }
+
+        private String formatDate(Date newDate)
+        {
+            Log.i(TAG, "[DATE] newDate in milliseconds is: " + newDate.getTime());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(newDate.getTime());
+
+            Date calendarDate = calendar.getTime();
+            Log.i(TAG, "[DATE] The calendarDate time is: " + calendarDate.getTime());
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+            String formattedDate = dateFormat.format(calendar.getTime());
+            Log.i(TAG, "[DATE] formattedDate: " + formattedDate);
+
+            return DateUtils.formatSameDayTime(newDate.getTime(), (new Date().getTime()), DateFormat.SHORT, DateFormat.SHORT).toString();
+
+//            if(DateUtils.isToday(newDate.getTime()))
+//                return "Test";
+//
+//            return newDate.toString();
         }
     }
 

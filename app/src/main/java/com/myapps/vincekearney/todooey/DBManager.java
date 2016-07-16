@@ -21,7 +21,7 @@ public class DBManager extends SQLiteOpenHelper
                     + COLUMN_NAME_TODO_ID + " TEXT, "
                     + COLUMN_NAME_TODO_TEXT + " TEXT, "
                     + COLUMN_NAME_COMPLETED + " INTEGER, "
-                    + COLUMN_NAME_DATE + " INTEGER" + ")";
+                    + COLUMN_NAME_DATE + " TEXT" + ")";
 
     public DBManager(Context context)
     {
