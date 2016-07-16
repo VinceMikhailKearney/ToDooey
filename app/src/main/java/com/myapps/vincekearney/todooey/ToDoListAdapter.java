@@ -90,23 +90,7 @@ public class ToDoListAdapter extends BaseAdapter
 
         private String formatDate(Date newDate)
         {
-            Log.i(TAG, "[DATE] newDate in milliseconds is: " + newDate.getTime());
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(newDate.getTime());
-
-            Date calendarDate = calendar.getTime();
-            Log.i(TAG, "[DATE] The calendarDate time is: " + calendarDate.getTime());
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-            String formattedDate = dateFormat.format(calendar.getTime());
-            Log.i(TAG, "[DATE] formattedDate: " + formattedDate);
-
             return DateUtils.formatSameDayTime(newDate.getTime(), (new Date().getTime()), DateFormat.SHORT, DateFormat.SHORT).toString();
-
-//            if(DateUtils.isToday(newDate.getTime()))
-//                return "Test";
-//
-//            return newDate.toString();
         }
     }
 
