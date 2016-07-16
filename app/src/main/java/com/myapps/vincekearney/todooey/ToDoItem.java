@@ -10,15 +10,7 @@ public class ToDoItem
     private String todotext;
 
     public ToDoItem () {}
-
-    public ToDoItem(String todotext, String todoid, Boolean completed, Date date)
-    {
-        this.todotext = todotext;
-        this.todoid = todoid;
-        this.completed = completed;
-        this.date = date;
-    }
-
+    // The methods below are used for setting the object up - Seems easier to read.g
     public String getTodotext() { return this.todotext; }
     public void setTodotext(String todotext) { this.todotext = todotext; }
 
@@ -28,8 +20,8 @@ public class ToDoItem
     public Boolean getCompleted() { return this.completed; }
     public void setCompleted(Boolean completed) { this.completed = completed; }
 
-    public Date getDate() { return this.date; }
-    public void setDate(Date date) {this.date = date; }
+//    public Date getDate() { return this.date; }
+//    public void setDate(Date date) {this.date = date; }
 
     @Override
     public String toString() {

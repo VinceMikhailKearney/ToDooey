@@ -129,7 +129,6 @@ public class ToDoDBHelper extends DBManager
         ToDoItem todo = new ToDoItem();
         todo.setId(cursor.getString(0));
         todo.setTodotext(cursor.getString(1));
-        todo.setDate(null);
         todo.setCompleted(cursor.getInt(2) == 1);
         return todo;
     }
