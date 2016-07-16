@@ -46,29 +46,33 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         super.onCreate(savedInstanceState);
         // Here we are telling the app that we want to be full screen - I.e. The menu bar at the top is gone (date and battery thang).
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // Set content view and assign others
         setContentView(R.layout.activity_to_do_list);
         this.toDoList = (ListView) findViewById(R.id.toDoList);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        this.drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
-        //==================================================================================================
+        // Set up action bar
+        setSupportActionBar(toolbar);
         this.actionBar = getSupportActionBar();
         if(this.actionBar != null) {
-            this.actionBar.setDisplayHomeAsUpEnabled(true); // Why NPE?
+            this.actionBar.setDisplayHomeAsUpEnabled(true);
             this.actionBar.setHomeButtonEnabled(true);
         }
 
-        this.drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        this.activityTitle = this.getTitle().toString();
+        // Set up and populate navigation drawer
         this.populateNavDrawer();
         this.setupDrawer();
-        //==================================================================================================
-
+        // Set up other
+        this.activityTitle = this.getTitle().toString();
         this.dbHelper = new ToDoDBHelper(this);
         this.toDoListItems = dbHelper.getAllToDos();
+        // ToDoAdapter
         this.toDoAdapter = new ToDoListAdapter(this, this.toDoListItems);
         this.toDoAdapter.setToDoListAdapterListener(this);
         this.toDoList.setAdapter(this.toDoAdapter);
+        // Delete Dialog
         this.deleteToDoDialog = new DeleteToDoDialog(this);
         this.deleteToDoDialog.setListener(this);
     }
