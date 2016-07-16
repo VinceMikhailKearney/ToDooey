@@ -48,12 +48,14 @@ public class ToDoListAdapter extends BaseAdapter
 
         public ToDoViewHolder(View itemView) {
             super(itemView);
+            Log.i(TAG, "ToDoViewHolder");
             this.checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
             this.checkBox.setOnClickListener(this);
         }
 
         public void bind(ToDoItem item)
         {
+            Log.i(TAG, "bind");
             this.toDoItem = item;
             this.checkBox.setChecked(item.getCompleted());
             this.checkBox.setText(item.getTodotext());
@@ -79,9 +81,20 @@ public class ToDoListAdapter extends BaseAdapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        RecyclerView.ViewHolder holder = new ToDoViewHolder(this.inflater.inflate(R.layout.to_do_list_row, parent, false));
-        convertView = holder.itemView;
-        ((ToDoViewHolder) holder).bind((ToDoItem) getItem(position));
+        Log.i(TAG, "getView");
+        ToDoViewHolder holder;
+        if(convertView == null)
+        {
+            holder = new ToDoViewHolder(this.inflater.inflate(R.layout.to_do_list_row, parent, false));
+            convertView = holder.itemView;
+            convertView.setTag(holder);
+        }
+        else
+        {
+            holder = (ToDoViewHolder) convertView.getTag();
+        }
+
+        holder.bind((ToDoItem) getItem(position));
         return convertView;
     }
 
