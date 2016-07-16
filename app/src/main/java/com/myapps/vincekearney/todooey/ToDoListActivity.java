@@ -137,12 +137,21 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     /* ---- Helper methods ---- */
     public void refreshToDos(int position)
     {
-        this.toDoListItems = dbHelper.getAllToDos();
-        if(position == 1)
-            this.toDoListItems = dbHelper.getToDos(true);
-        else if(position == 2)
-            this.toDoListItems = dbHelper.getToDos(false);
-
+        switch (position)
+        {
+            case 0:
+                this.toDoListItems = dbHelper.getAllToDos();
+                break;
+            case 1:
+                this.toDoListItems = dbHelper.getToDos(true);
+                break;
+            case 2:
+                this.toDoListItems = dbHelper.getToDos(false);
+                break;
+            default:
+                break;
+        }
+        
         this.toDoAdapter.setToDoList(this.toDoListItems);
         this.toDoAdapter.notifyDataSetChanged();
     }
