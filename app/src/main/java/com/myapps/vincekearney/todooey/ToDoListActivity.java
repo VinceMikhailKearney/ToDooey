@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 //import android.view.WindowManager;
 
-public class ToDoListActivity extends AppCompatActivity
+public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapter.ToDoListAdapterListener
 {
     private final int TODO_ADDED = 1;
     private static final String TAG = "ToDoListActivity";
@@ -45,6 +45,7 @@ public class ToDoListActivity extends AppCompatActivity
             this.toDoListItems.add(item);
 
         ToDoListAdapter adapter = new ToDoListAdapter(this, this.toDoListItems);
+        adapter.setToDoListAdapterListener(this);
         this.toDoList.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -71,9 +72,10 @@ public class ToDoListActivity extends AppCompatActivity
         dbHelper.deleteAllToDos();
     }
 
-    public void toDoClicked(View view)
-    {
-        Log.i(TAG, "Tapped a ToDo item.");
+    // Overriding of the ToDoListAdapaterListener method.
+    @Override
+    public void OnClickItem(ToDoItem item) {
+        Log.i(TAG, "Clicked a check box and received listener event.");
     }
 
     // This is the callback when AddToDoActivity finishes - Passes an Intent with data that we can use.
@@ -114,5 +116,6 @@ public class ToDoListActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+
     //==============================END OF CLASS==============================
 }

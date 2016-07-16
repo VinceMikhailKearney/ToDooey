@@ -32,6 +32,11 @@ public class ToDoListAdapter extends BaseAdapter
         myInflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    public void setToDoListAdapterListener(ToDoListAdapterListener listener)
+    {
+        this.toDoListener = listener;
+    }
+
     public class ToDoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         private ToDoItem toDoItem;
@@ -54,7 +59,11 @@ public class ToDoListAdapter extends BaseAdapter
 
         @Override
         public void onClick(View v) {
-                Log.i(TAG, "onClick");
+            Log.i(TAG, "onClick");
+            if(toDoListener != null) {
+                Log.i(TAG, "onClick --> toDoListener is not null");
+                toDoListener.OnClickItem(this.toDoItem);
+            }
         }
     }
 
