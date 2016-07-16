@@ -33,7 +33,7 @@ public class ToDoDBHelper extends DBManager
         thisDataBase().insert(ToDoDBHelper.TO_DO_ITEMS_TABlE, null, toDoValues);
         closeDBManger();
 
-        return getToDo(toDoID);
+        return getToDoAndDelete(toDoID, false); // This returns a to-do item.
     }
 
     public void updateCompleted(String id, Boolean completed)
@@ -47,21 +47,32 @@ public class ToDoDBHelper extends DBManager
         thisDataBase().update(TO_DO_ITEMS_TABlE, newValues, searchString, null);
     }
 
-    public ToDoItem getToDo(String id)
+    public ToDoItem getToDoAndDelete(String id, Boolean delete)
     {
+        ToDoItem item = null;
         Cursor cursor = fetchSingleToDo(id);
         if (cursor.moveToFirst() && cursor.getCount() == 1)
         {
-            ToDoItem item = createToDoFrom(cursor);
-            Log.i(TAG, "Got To-Do with ID: " + cursor.getString(0));
-            cursor.close();
-            closeDBManger();
-            return item;
+            String toDoId = cursor.getString(0);
+            if(delete)
+            {
+                Log.i(TAG, "Deleting to do with id - " + id);
+                thisDataBase().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_ID +" = \"" + toDoId +"\"", null);
+            }
+            else
+            {
+                item = createToDoFrom(cursor);
+                Log.i(TAG, "Got To-Do with ID: " + toDoId);
+            }
         }
         else // The count was greater than 1
         {
             throw new IllegalStateException("Only supposed to fetch one. Count was -> " + cursor.getCount());
         }
+
+        cursor.close();
+        closeDBManger();
+        return item;
     }
 
     // Retrieving the list of To-Do items
@@ -107,23 +118,6 @@ public class ToDoDBHelper extends DBManager
 
         cursor.close();
         closeDBManger();
-    }
-
-    public void deleteToDo(String id)
-    {
-        Cursor cursor = fetchSingleToDo(id);
-        if (cursor.moveToFirst() && cursor.getCount() == 1)
-        {
-            String toDoId = cursor.getString(0);
-            Log.i(TAG, "Deleting to do with id - " + id);
-            thisDataBase().delete(TO_DO_ITEMS_TABlE, COLUMN_NAME_TODO_ID +" = \"" + toDoId +"\"", null);
-            cursor.close();
-            closeDBManger();
-        }
-        else // The count was greater than 1
-        {
-            throw new IllegalStateException("Only supposed to fetch one. Count was -> " + cursor.getCount());
-        }
     }
 
     public ToDoItem createToDoFrom(Cursor cursor)

@@ -67,7 +67,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
                 .setMessage(toDoItem.getTodotext())
                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dbHelper.deleteToDo(toDoItem.getId());
+                        dbHelper.getToDoAndDelete(toDoItem.getId(), true); // This returns null.
                         toDoListItems.remove(toDoItem);
                         toDoAdapter.notifyDataSetChanged();
                     }
