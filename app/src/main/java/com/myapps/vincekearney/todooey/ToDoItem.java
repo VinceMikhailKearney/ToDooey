@@ -20,8 +20,8 @@ public class ToDoItem
     public Boolean getCompleted() { return this.completed; }
     public void setCompleted(Boolean completed) { this.completed = completed; }
 
-//    public Date getDate() { return this.date; }
-//    public void setDate(Date date) {this.date = date; }
+    public Date getDate() { return this.date; }
+    public void setDate(Date date) {this.date = date; }
 
     @Override
     public String toString() {

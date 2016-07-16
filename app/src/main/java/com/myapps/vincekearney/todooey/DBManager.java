@@ -14,13 +14,14 @@ public class DBManager extends SQLiteOpenHelper
     public static final String COLUMN_NAME_TODO_ID = "todoid";
     public static final String COLUMN_NAME_TODO_TEXT = "todotext";
     public static final String COLUMN_NAME_COMPLETED = "completed";
-//    public static final String COLUMN_NAME_DATE = "date";
+    public static final String COLUMN_NAME_DATE = "date";
 
     private static final String CREATE_DATABASE =
-                    "CREATE TABLE IF NOT EXISTS " +TO_DO_ITEMS_TABlE +"("
+                    "CREATE TABLE IF NOT EXISTS " + TO_DO_ITEMS_TABlE +"("
                     + COLUMN_NAME_TODO_ID + " TEXT, "
                     + COLUMN_NAME_TODO_TEXT + " TEXT, "
-                    + COLUMN_NAME_COMPLETED + " INTEGER" + ")";
+                    + COLUMN_NAME_COMPLETED + " INTEGER, "
+                    + COLUMN_NAME_DATE + " INTEGER" + ")";
 
     public DBManager(Context context)
     {
@@ -39,6 +40,9 @@ public class DBManager extends SQLiteOpenHelper
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
         // If we ever upgrade, which we won't for now, we do the shiz here.
+        Log.w(DBManager.class.getName(), "Upgrading DB from " + oldVersion + " to " + newVersion);
+        db.execSQL("DROP TABLE IF EXISTS " + TO_DO_ITEMS_TABlE);
+        onCreate(db);
     }
     //==============================END OF CLASS==============================
 }

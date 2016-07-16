@@ -6,8 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class ToDoDBHelper extends DBManager
@@ -33,9 +37,12 @@ public class ToDoDBHelper extends DBManager
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_ID, toDoID); // Do I need? I can delete based upon text.
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_TODO_TEXT, text);
         toDoValues.put(ToDoDBHelper.COLUMN_NAME_COMPLETED, 0);
+        toDoValues.put(ToDoDBHelper.COLUMN_NAME_DATE, (new Date().getTime()));
 
         thisDataBase().insert(ToDoDBHelper.TO_DO_ITEMS_TABlE, null, toDoValues);
         closeDBManger();
+
+        Log.i(TAG, getAllToDos().toString());
 
         return toDo(toDoID, getOrDelete.FETCH_TODO); // This returns a to-do item.
     }
@@ -130,6 +137,7 @@ public class ToDoDBHelper extends DBManager
         todo.setId(cursor.getString(0));
         todo.setTodotext(cursor.getString(1));
         todo.setCompleted(cursor.getInt(2) == 1);
+        todo.setDate(new Date(cursor.getInt(3)));
         return todo;
     }
 
