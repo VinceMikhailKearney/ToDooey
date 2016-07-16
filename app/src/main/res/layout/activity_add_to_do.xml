@@ -20,8 +20,9 @@
     <EditText
         android:id="@+id/toDoText"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:padding="20dp"
+        android:layout_height="65dp"
+        android:padding="10dp"
+        android:inputType="textCapSentences"
         android:hint="@string/to_do"
         android:layout_below="@id/label" />
 
