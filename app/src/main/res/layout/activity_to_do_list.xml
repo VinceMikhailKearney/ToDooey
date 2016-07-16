@@ -29,7 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_dialer"
+        app:backgroundTint="@android:color/holo_purple"
+        android:src="@android:drawable/presence_online"
         android:onClick="startIntent"/>
 
 </android.support.design.widget.CoordinatorLayout>
