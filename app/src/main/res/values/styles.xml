@@ -17,4 +17,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="MyTheme" parent="AppTheme" >
+        <item name="android:colorForeground">@color/abc_primary_text_disable_only_material_light</item>
+        <item name="android:navigationBarColor">@color/black</item>
+    </style>
+
 </resources>
