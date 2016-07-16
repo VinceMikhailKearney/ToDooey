@@ -23,7 +23,7 @@ public class ToDoListAdapter extends BaseAdapter
     private List<ToDoItem> todoList;
     private ToDoListAdapterListener toDoListener;
 
-    // The interface (or protocol in iOS) that states the methods the listener implements.
+    // The interface (or protocol in iOS for delegate) that states the methods the listener implements.
     public interface ToDoListAdapterListener
     {
         void OnClickItem(ToDoItem item);
