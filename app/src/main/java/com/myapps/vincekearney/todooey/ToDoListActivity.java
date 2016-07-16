@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapter.ToDoListAdapterListener, DeleteToDoDialog.DeleteDialogListener
 {
@@ -40,6 +39,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     private String activityTitle;
     //==================================================================================================
 
+    /* --- Lifecycle methods ---- */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -77,18 +77,68 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         this.deleteToDoDialog.setListener(this);
     }
 
-    // My on click events
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState)
+    {
+        super.onPostCreate(savedInstanceState);
+        this.drawerToggle.syncState();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_to_do_list, menu);
+        return true;
+    }
+
+    // Selecting something in the Menu
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        // If the navigation drawer is not set up - Let's just catch the NPE here.
+        if(this.drawerToggle == null) {
+            Toast.makeText(ToDoListActivity.this, "The drawer toggle is null. Would throw NPE.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (this.drawerToggle.onOptionsItemSelected(item))
+            return true;
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings)
+            return true;
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    // To manage orientation changing with dialogs showing.
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        this.drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    /* ---- onClick methods ---- */
+    // FAB
     public void startIntent(View view)
     {
         Intent addToDoIntent = new Intent(ToDoListActivity.this, AddToDoActivity.class);
         startActivityForResult(addToDoIntent,TODO_ADDED);
     }
 
+    // Delete All
     public void deleteAllToDoItems(View view)
     {
         this.deleteToDoDialog.setDialogToDo(null).show();
     }
 
+    /* ---- Helper methods ---- */
     public void refreshToDos(int position)
     {
         this.toDoListItems = dbHelper.getAllToDos();
@@ -101,54 +151,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         this.toDoAdapter.notifyDataSetChanged();
     }
 
-    // ToDoListAdapterListener methods
-    @Override
-    public void OnClickItem(ToDoItem item) {
-        Log.i(TAG, "Clicked a check box and received listener event.");
-        dbHelper.updateCompleted(item.getId(), !item.getCompleted());
-    }
-
-    @Override
-    public void DeleteItem(ToDoItem item) {
-        this.deleteToDoDialog.setDialogToDo(item).show();
-    }
-
-    // DeleteToDoDialogListener methods
-    @Override
-    public void DeleteToDo(ToDoItem item)
-    {
-        dbHelper.toDo(item.getId(), ToDoDBHelper.getOrDelete.DELETE_TODO); // This returns null.
-        toDoListItems.remove(item);
-        toDoAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void DeleteAllToDos()
-    {
-        dbHelper.deleteAllToDos();
-        this.toDoListItems = dbHelper.getAllToDos();
-        this.toDoAdapter.setToDoList(this.toDoListItems);
-        this.toDoAdapter.notifyDataSetChanged();
-    }
-
-    // This is the callback when AddToDoActivity finishes - Passes an Intent with data that we can use.
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "Got a result back from the add activity.");
-        // We need to make sure the requestCode matches the task that we asked for above.
-        // If result is OK - We have something we need to look at.
-        if (requestCode == TODO_ADDED && resultCode == RESULT_OK)
-        {
-            // Get the string value that has the ID entered in the parameter.
-            String toDo = data.getStringExtra(AddToDoActivity.ToDo_Desc);
-            this.toDoListItems.add(dbHelper.addToDo(toDo));
-            this.toDoAdapter.notifyDataSetChanged();
-        }
-    }
-
-    // Other
+    /* ---- Navigation Drawer ---- */
     private void populateNavDrawer()
     {
         this.drawerList = (ListView) findViewById(R.id.navList);
@@ -191,50 +194,52 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         this.drawerLayout.setDrawerListener(this.drawerToggle);
     }
 
+    /* ---- ToDoListAdapterListener methods ---- */
     @Override
-    protected void onPostCreate(Bundle savedInstanceState)
-    {
-        super.onPostCreate(savedInstanceState);
-        this.drawerToggle.syncState();
+    public void OnClickItem(ToDoItem item) {
+        Log.i(TAG, "Clicked a check box and received listener event.");
+        dbHelper.updateCompleted(item.getId(), !item.getCompleted());
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
+    public void DeleteItem(ToDoItem item) {
+        this.deleteToDoDialog.setDialogToDo(item).show();
+    }
+
+    // /* ---- DeleteToDoDialogListener methods ---- */
+    @Override
+    public void DeleteToDo(ToDoItem item)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_to_do_list, menu);
-        return true;
+        dbHelper.toDo(item.getId(), ToDoDBHelper.getOrDelete.DELETE_TODO); // This returns null.
+        toDoListItems.remove(item);
+        toDoAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
+    public void DeleteAllToDos()
     {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        dbHelper.deleteAllToDos();
+        this.toDoListItems = dbHelper.getAllToDos();
+        this.toDoAdapter.setToDoList(this.toDoListItems);
+        this.toDoAdapter.notifyDataSetChanged();
+    }
 
-        // If the navigation drawer is not set up - Let's just catch the NPE here.
-        if(this.drawerToggle == null) {
-            Toast.makeText(ToDoListActivity.this, "The drawer toggle is null. Would throw NPE.", Toast.LENGTH_SHORT).show();
-            return false;
+    /* --- Callback for startActivityForResult() ---- */
+    // Passes an Intent with data that we can us.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG, "Got a result back from the add activity.");
+        // We need to make sure the requestCode matches the task that we asked for above.
+        // If result is OK - We have something we need to look at.
+        if (requestCode == TODO_ADDED && resultCode == RESULT_OK)
+        {
+            // Get the string value that has the ID entered in the parameter.
+            String toDo = data.getStringExtra(AddToDoActivity.ToDo_Desc);
+            this.toDoListItems.add(dbHelper.addToDo(toDo));
+            this.toDoAdapter.notifyDataSetChanged();
         }
-
-        if (this.drawerToggle.onOptionsItemSelected(item))
-            return true;
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
-            return true;
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    // To manage orientation changing with dialogs showing.
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        this.drawerToggle.onConfigurationChanged(newConfig);
     }
 
     //==============================END OF CLASS==============================
