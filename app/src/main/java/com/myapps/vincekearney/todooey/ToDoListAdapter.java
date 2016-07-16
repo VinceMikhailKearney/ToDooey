@@ -1,6 +1,8 @@
 package com.myapps.vincekearney.todooey;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +13,49 @@ import java.util.List;
 
 public class ToDoListAdapter extends BaseAdapter
 {
+    private static final String TAG = "ToDoAdapter";
     private Context myContext;
     private LayoutInflater myInflater;
     private List<ToDoItem> myDataSource;
     private CheckBox toDoCheckBox;
 
+    private ToDoListAdapterListener toDoListener;
+
+    public interface ToDoListAdapterListener
+    {
+        void OnClickItem(ToDoItem item);
+    }
+
     public ToDoListAdapter(Context context, List<ToDoItem> items) {
         myContext = context;
         myDataSource = items;
         myInflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public class ToDoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+    {
+        private ToDoItem toDoItem;
+        protected CheckBox checkBox;
+
+        public ToDoViewHolder(View itemView) {
+            super(itemView);
+            Log.i(TAG, "ToDoViewHolder");
+            itemView.setOnClickListener(this);
+            this.checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
+        }
+
+        public void bind(ToDoItem item)
+        {
+            Log.i(TAG, "bind");
+            this.toDoItem = item;
+            checkBox.setChecked(item.getCompleted());
+            checkBox.setText(item.getTodotext());
+        }
+
+        @Override
+        public void onClick(View v) {
+                Log.i(TAG, "Post an event");
+        }
     }
 
     // Essentially numberOfRowsInSection
@@ -32,13 +68,10 @@ public class ToDoListAdapter extends BaseAdapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        if(convertView == null)
-            convertView = myInflater.inflate(R.layout.to_do_list_row, parent, false);
-
-        ToDoItem item = (ToDoItem) getItem(position);
-        this.toDoCheckBox = (CheckBox) convertView.findViewById(R.id.checkBox);
-        this.toDoCheckBox.setText(item.getTodotext());
-        this.toDoCheckBox.setChecked(item.getCompleted());
+        Log.i(TAG, "getView");
+        RecyclerView.ViewHolder holder = new ToDoViewHolder(myInflater.inflate(R.layout.to_do_list_row, parent, false));
+        convertView = holder.itemView;
+        ((ToDoViewHolder) holder).bind((ToDoItem) getItem(position));
         return convertView;
     }
 

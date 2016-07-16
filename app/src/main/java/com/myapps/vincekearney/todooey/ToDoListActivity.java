@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import java.util.List;
 public class ToDoListActivity extends AppCompatActivity
 {
     private final int TODO_ADDED = 1;
+    private static final String TAG = "ToDoListActivity";
     private ToDoDBHelper dbHelper;
     private ListView toDoList;
     private List<ToDoItem> toDoListItems = new ArrayList<>();
@@ -71,7 +73,7 @@ public class ToDoListActivity extends AppCompatActivity
 
     public void toDoClicked(View view)
     {
-
+        Log.i(TAG, "Tapped a ToDo item.");
     }
 
     // This is the callback when AddToDoActivity finishes - Passes an Intent with data that we can use.
