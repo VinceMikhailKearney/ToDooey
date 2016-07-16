@@ -4,7 +4,10 @@
     <string name="main_todo_label">This is the first label that is seen in the main activity and I would like to see if the longer I type for this string if the number of lines will increase.</string>
     <string name="add_to_do">Add To-Do</string>
     <string name="delete_to_do">Delete To-Do</string>
+    <string name="delete_all_to_do">Delete All To-Do Items</string>
+    <string name="delete_all_to_do_message">This will delete all your ToDo items. Are you sure you would like to proceed?</string>
     <string name="delete">Delete</string>
+    <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
     <string name="to_do">To-Do</string>
     <string name="explain_add_to_do">Below you can enter a new To-Do item :-D</string>

@@ -18,12 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 //import android.view.WindowManager;
 
-public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapter.ToDoListAdapterListener
+public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapter.ToDoListAdapterListener, DeleteToDoDialog.DeleteDialogListener
 {
     private final int TODO_ADDED = 1;
     private static final String TAG = "ToDoListActivity";
     private ToDoDBHelper dbHelper;
     private ToDoListAdapter toDoAdapter;
+    private DeleteToDoDialog deleteToDoDialog;
     private ListView toDoList;
     private List<ToDoItem> toDoListItems = new ArrayList<>();
 
@@ -43,44 +44,23 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         this.toDoAdapter = new ToDoListAdapter(this, this.toDoListItems);
         this.toDoAdapter.setToDoListAdapterListener(this);
         this.toDoList.setAdapter(this.toDoAdapter);
+        this.deleteToDoDialog = new DeleteToDoDialog(this);
+        this.deleteToDoDialog.setListener(this);
     }
 
+    // My on click events
     public void startIntent(View view)
     {
         Intent addToDoIntent = new Intent(ToDoListActivity.this, AddToDoActivity.class);
         startActivityForResult(addToDoIntent,TODO_ADDED);
     }
-    // My on click events
+
     public void deleteAllToDoItems(View view)
     {
-        dbHelper.deleteAllToDos();
-        this.toDoListItems = dbHelper.getAllToDos();
-        this.toDoAdapter.setToDoList(this.toDoListItems);
-        this.toDoAdapter.notifyDataSetChanged();
+        this.deleteToDoDialog.setDialogToDo(null).show();
     }
 
-    // Delete single to do
-    private void delete(final ToDoItem toDoItem)
-    {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ToDoListActivity.this);
-        alertDialogBuilder.setTitle(R.string.delete_to_do);
-        alertDialogBuilder
-                .setMessage(toDoItem.getTodotext())
-                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dbHelper.toDo(toDoItem.getId(), ToDoDBHelper.getOrDelete.DELETE_TODO); // This returns null.
-                        toDoListItems.remove(toDoItem);
-                        toDoAdapter.notifyDataSetChanged();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                }).show();
-    }
-
-    // Overriding of the ToDoListAdapaterListener method.
+    // ToDoListAdapterListener methods
     @Override
     public void OnClickItem(ToDoItem item) {
         Log.i(TAG, "Clicked a check box and received listener event.");
@@ -89,7 +69,25 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
 
     @Override
     public void DeleteItem(ToDoItem item) {
-        this.delete(item);
+        this.deleteToDoDialog.setDialogToDo(item).show();
+    }
+
+    // DeleteToDoDialogListener methods
+    @Override
+    public void DeleteToDo(ToDoItem item)
+    {
+        dbHelper.toDo(item.getId(), ToDoDBHelper.getOrDelete.DELETE_TODO); // This returns null.
+        toDoListItems.remove(item);
+        toDoAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void DeleteAllToDos()
+    {
+        dbHelper.deleteAllToDos();
+        this.toDoListItems = dbHelper.getAllToDos();
+        this.toDoAdapter.setToDoList(this.toDoListItems);
+        this.toDoAdapter.notifyDataSetChanged();
     }
 
     // This is the callback when AddToDoActivity finishes - Passes an Intent with data that we can use.
@@ -107,6 +105,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         }
     }
 
+    // Other
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -130,6 +129,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         return super.onOptionsItemSelected(item);
     }
 
+    // To manage orientation changing with dialogs showing.
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
