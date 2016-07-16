@@ -3,13 +3,19 @@ package com.myapps.vincekearney.todooey;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +30,15 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     private ListView toDoList;
     private List<ToDoItem> toDoListItems = new ArrayList<>();
 
+    //==================================================================================================
+    private ActionBar actionBar;
+    private ListView drawerList;
+    private ArrayAdapter<String> navArrayAdapter;
+    private ActionBarDrawerToggle drawerToggle;
+    private DrawerLayout drawerLayout;
+    private String activityTitle;
+    //==================================================================================================
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -34,6 +49,19 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         this.toDoList = (ListView) findViewById(R.id.toDoList);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //==================================================================================================
+        this.actionBar = getSupportActionBar();
+        if(this.actionBar != null) {
+            this.actionBar.setDisplayHomeAsUpEnabled(true); // Why NPE?
+            this.actionBar.setHomeButtonEnabled(true);
+        }
+
+        this.drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        this.activityTitle = this.getTitle().toString();
+        this.populateNavDrawer();
+        this.setupDrawer();
+        //==================================================================================================
 
         this.dbHelper = new ToDoDBHelper(this);
         this.toDoListItems = dbHelper.getAllToDos();
@@ -104,6 +132,54 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     }
 
     // Other
+    private void populateNavDrawer()
+    {
+        this.drawerList = (ListView) findViewById(R.id.navList);
+        String[] osArray = { "All", "Completed", "Not Completed" };
+        this.navArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, osArray);
+        this.drawerList.setAdapter(this.navArrayAdapter);
+
+        this.drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(ToDoListActivity.this, "We want to change the to do's we show", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupDrawer()
+    {
+        this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, R.string.drawer_open, R.string.drawer_close)
+        {
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView)
+            {
+                super.onDrawerOpened(drawerView);
+                if(actionBar != null) actionBar.setTitle(R.string.choose_to_do_list);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view)
+            {
+                super.onDrawerClosed(view);
+                if(actionBar != null) actionBar.setTitle(activityTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        this.drawerToggle.setDrawerIndicatorEnabled(true);
+        this.drawerLayout.setDrawerListener(this.drawerToggle);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState)
+    {
+        super.onPostCreate(savedInstanceState);
+        this.drawerToggle.syncState();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -120,6 +196,15 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        // If the navigation drawer is not set up - Let's just catch the NPE here.
+        if(this.drawerToggle == null) {
+            Toast.makeText(ToDoListActivity.this, "The drawer toggle is null. Would throw NPE.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (this.drawerToggle.onOptionsItemSelected(item))
+            return true;
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
             return true;
@@ -131,6 +216,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        this.drawerToggle.onConfigurationChanged(newConfig);
     }
 
     //==============================END OF CLASS==============================

@@ -11,4 +11,7 @@
     <string name="cancel">Cancel</string>
     <string name="to_do">To-Do</string>
     <string name="explain_add_to_do">Below you can enter a new To-Do item :-D</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="choose_to_do_list">Choose ToDo List</string>
 </resources>
