@@ -40,8 +40,8 @@ public class ToDoListAdapter extends BaseAdapter
         public ToDoViewHolder(View itemView) {
             super(itemView);
             Log.i(TAG, "ToDoViewHolder");
-            itemView.setOnClickListener(this);
             this.checkBox = (CheckBox) itemView.findViewById(R.id.checkBox);
+            this.checkBox.setOnClickListener(this);
         }
 
         public void bind(ToDoItem item)
@@ -54,7 +54,7 @@ public class ToDoListAdapter extends BaseAdapter
 
         @Override
         public void onClick(View v) {
-                Log.i(TAG, "Post an event");
+                Log.i(TAG, "onClick");
         }
     }
 
