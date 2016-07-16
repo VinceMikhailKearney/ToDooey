@@ -10,22 +10,26 @@ public class ToDoItem
     private String todoid;
     private String todotext;
 
+    /* ---- Constructor ---- */
     public ToDoItem () {}
-    // The methods below are used for setting the object up - Seems easier to read.g
-    public String getTodotext() { return this.todotext; }
-    public void setTodotext(String todotext) { this.todotext = todotext; }
 
-    public String getId() { return this.todoid; }
+    // The below are organised corresponding to their place in the DB table (0 - 3)
+    /* ---- Set methods ---- */
     public void setId(String todoid) { this.todoid = todoid; }
-
-    public Boolean getCompleted() { return this.completed; }
+    public void setTodotext(String todotext) { this.todotext = todotext; }
     public void setCompleted(Boolean completed) { this.completed = completed; }
-
-    public Date getDate() { return this.date; }
     public void setDate(Date date) {this.date = date; }
 
+    /* ---- Get methods ---- */
+    public String getId() { return this.todoid; }
+    public String getTodotext() { return this.todotext; }
+    public Boolean getCompleted() { return this.completed; }
+    public Date getDate() { return this.date; }
+
+    /* ---- Override toString to print out ToDoItem ---- */
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "\nToDoItem{" +
                 "\nid = " + this.todoid +
                 "\ntext = " + this.todotext +
@@ -33,5 +37,5 @@ public class ToDoItem
                 "\ncompleted = " + this.completed + '}';
     }
 
-    //==============================END OF CLASS==============================
+    /* ===============END OF CLASS=============== */
 }
