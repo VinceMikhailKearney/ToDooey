@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -95,6 +96,20 @@ public class ToDoDBHelper extends DBManager
         String searchString = String.format("%s%s%s","'",completedAsInt,"'");
         String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE + " WHERE " + COLUMN_NAME_COMPLETED + " = " + searchString;
         return fetchToDoItemsWithQuery(query);
+    }
+
+    public List<ToDoItem> getToDosFromToday()
+    {
+        Log.i(TAG, "Asking for all ToDo items that were made today.");
+        // Query sets to select ALL from the To-Do table.
+        String query = "SELECT * FROM " + TO_DO_ITEMS_TABlE;
+        List<ToDoItem> toDosToday =  new ArrayList<>();
+        for(ToDoItem item : fetchToDoItemsWithQuery(query))
+        {
+            if(DateUtils.isToday(item.getDate().getTime()))
+                toDosToday.add(item);
+        }
+        return toDosToday;
     }
 
     private List<ToDoItem> fetchToDoItemsWithQuery(String query)

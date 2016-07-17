@@ -148,6 +148,9 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
             case 2:
                 this.toDoListItems = dbHelper.getToDos(false);
                 break;
+            case 3:
+                this.toDoListItems = dbHelper.getToDosFromToday();
+                break;
             default:
                 break;
         }
@@ -160,7 +163,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     private void populateNavDrawer()
     {
         ListView drawerList = (ListView) findViewById(R.id.navList);
-        String[] osArray = { "All", "Completed", "Not Completed" };
+        String[] osArray = { "All", "Completed", "Not Completed", "Today" };
         ArrayAdapter<String> navAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, osArray);
         if(drawerList != null) {
             drawerList.setAdapter(navAdapter);
