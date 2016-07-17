@@ -6,6 +6,7 @@
     <string name="delete_all_to_do">Delete All To-Do Items</string>
     <string name="delete_all_to_do_message">This will delete all your ToDo items. Are you sure you would like to proceed?</string>
     <string name="delete">Delete</string>
+    <string name="delete_all">Delete All</string>
     <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
     <string name="all">All</string>
