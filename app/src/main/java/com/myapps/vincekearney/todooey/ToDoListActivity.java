@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     private DrawerLayout drawerLayout;
     private List<ToDoItem> toDoListItems = new ArrayList<>();
     private String activityTitle;
+    private TextView currentToDoList;
     private ToDoDBHelper dbHelper;
     private ToDoListAdapter toDoAdapter;
 
@@ -47,6 +49,9 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         ListView toDoList = (ListView) findViewById(R.id.toDoList);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         this.drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        this.currentToDoList = (TextView) findViewById(R.id.currentToDoList);
+        if(this.currentToDoList != null)
+            this.currentToDoList.setText(R.string.all);
 
         // Set up action bar
         setSupportActionBar(toolbar);
@@ -141,15 +146,19 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         {
             case 0:
                 this.toDoListItems = dbHelper.getAllToDos();
+                this.currentToDoList.setText(R.string.all);
                 break;
             case 1:
                 this.toDoListItems = dbHelper.getToDos(true);
+                this.currentToDoList.setText(R.string.completed);
                 break;
             case 2:
                 this.toDoListItems = dbHelper.getToDos(false);
+                this.currentToDoList.setText(R.string.not_completed);
                 break;
             case 3:
                 this.toDoListItems = dbHelper.getToDosFromToday();
+                this.currentToDoList.setText(R.string.today);
                 break;
             default:
                 break;
