@@ -18,4 +18,5 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="choose_to_do_list">Choose ToDo List</string>
+    <string name="settings_general">General</string>
 </resources>
