@@ -106,6 +106,7 @@ public class ToDoListAdapter extends BaseAdapter
         {
             Log.i(TAG, "bind");
             this.toDoItem = item;
+            Log.i(TAG, "The to do item " + item.getTodotext() + " completed state is: " + item.getCompleted());
             this.checkBox.setChecked(item.getCompleted());
             this.checkBox.setText(item.getTodotext());
             this.date.setText(formatDate(this.toDoItem.getDate()));

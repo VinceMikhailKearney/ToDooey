@@ -217,6 +217,9 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     public void OnClickItem(ToDoItem item) {
         Log.i(TAG, "Clicked a check box and received listener event.");
         dbHelper.updateCompleted(item.getId(), !item.getCompleted());
+        this.toDoListItems = dbHelper.getAllToDos();
+        this.toDoAdapter.setToDoList(this.toDoListItems);
+        this.toDoAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -229,8 +232,9 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
     public void DeleteToDo(ToDoItem item)
     {
         dbHelper.toDo(item.getId(), ToDoDBHelper.getOrDelete.DELETE_TODO); // This returns null.
-        toDoListItems.remove(item);
-        toDoAdapter.notifyDataSetChanged();
+        this.toDoListItems.remove(item);
+        this.toDoAdapter.setToDoList(this.toDoListItems);
+        this.toDoAdapter.notifyDataSetChanged();
     }
 
     @Override
