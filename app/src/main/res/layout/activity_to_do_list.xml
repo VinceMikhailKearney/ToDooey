@@ -30,7 +30,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@android:color/holo_purple"
-        android:src="@android:drawable/presence_online"
+        android:src="@drawable/ic_add_to_do"
         android:onClick="startIntent"/>
 
 </android.support.design.widget.CoordinatorLayout>
