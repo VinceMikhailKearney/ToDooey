@@ -1,13 +1,11 @@
 package com.myapps.vincekearney.todooey;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -15,11 +13,10 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class ToDoListAdapter extends BaseAdapter
+public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoViewHolder>
 {
     private static final String TAG = "ToDoAdapter";
     /* ---- Properties ---- */
-    private LayoutInflater inflater;
     private List<ToDoItem> todoList;
     private ToDoListAdapterListener toDoListener;
 
@@ -31,14 +28,16 @@ public class ToDoListAdapter extends BaseAdapter
     }
 
     /* ---- Constructor and setter methods ---- */
-    public ToDoListAdapter(Context context, List<ToDoItem> items)
+    public ToDoListAdapter(List<ToDoItem> list)
     {
-        this.todoList = items;
-        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Log.i(TAG, "ToDoListAdapter");
+        this.setToDoList(list);
     }
 
     public void setToDoList(List<ToDoItem> list) {
+        Log.i(TAG, "Setting to do list for adapter");
         this.todoList = list;
+        this.notifyDataSetChanged();
     }
 
     public void setToDoListAdapterListener(ToDoListAdapterListener listener) {
@@ -46,30 +45,23 @@ public class ToDoListAdapter extends BaseAdapter
     }
 
     /* ---- Adapter populating and data methods ---- */
-    // Essentially numberOfRowsInSection
+    // Basically the cell that we use in cellForRowAtIndexPath
     @Override
-    public int getCount() {
-        return this.todoList.size();
+    public ToDoListAdapter.ToDoViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
+        Log.i(TAG, "onCreateViewHolder");
+        final View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.to_do_list_row, parent, false);
+        return new ToDoViewHolder(itemView);
     }
 
-    // Basically the cell that we use in cellForRowAtIndexPath
-    // Todo - See if there are any other performance improvements that could be made.
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    public void onBindViewHolder(ToDoViewHolder holder, int position)
     {
-        Log.i(TAG, "getView");
-        ToDoViewHolder holder;
-        if(convertView == null)
-        {
-            holder = new ToDoViewHolder(this.inflater.inflate(R.layout.to_do_list_row, parent, false));
-            convertView = holder.itemView;
-            convertView.setTag(holder);
-        } else {
-            holder = (ToDoViewHolder) convertView.getTag();
-        }
-
-        holder.bind((ToDoItem) getItem(position));
-        return convertView;
+        Log.i(TAG, "onBindViewHolder");
+        holder.setToDoItem(getItem(position));
+        holder.checkBox.setChecked(holder.toDoItem.getCompleted());
+        holder.checkBox.setText(holder.toDoItem.getTodotext());
+        holder.date.setText(holder.formatDate(holder.toDoItem.getDate()));
     }
 
     // So as far as I can see so far - indexPath.row
@@ -78,9 +70,14 @@ public class ToDoListAdapter extends BaseAdapter
         return position;
     }
 
-    // This just pulls out the object that we want for the row we're filling in from the data source we passed in.
+    // Essentially numberOfRowsInSection
     @Override
-    public Object getItem(int position) {
+    public int getItemCount() {
+        return this.todoList.size();
+    }
+
+    // This just pulls out the object that we want for the row we're filling in from the data source we passed in.
+    public ToDoItem getItem(int position) {
         return this.todoList.get(position);
     }
 
@@ -89,7 +86,7 @@ public class ToDoListAdapter extends BaseAdapter
     {
         protected CheckBox checkBox;
         protected TextView date;
-        private ToDoItem toDoItem;
+        protected ToDoItem toDoItem;
 
         /* ---- Constructor ---- */
         public ToDoViewHolder(View itemView)
@@ -102,14 +99,8 @@ public class ToDoListAdapter extends BaseAdapter
             this.checkBox.setOnLongClickListener(this);
         }
 
-        public void bind(ToDoItem item)
-        {
-            Log.i(TAG, "bind");
+        public void setToDoItem(ToDoItem item) {
             this.toDoItem = item;
-            Log.i(TAG, "The to do item " + item.getTodotext() + " completed state is: " + item.getCompleted());
-            this.checkBox.setChecked(item.getCompleted());
-            this.checkBox.setText(item.getTodotext());
-            this.date.setText(formatDate(this.toDoItem.getDate()));
         }
 
         /* ---- OnClick/LongClick Listener methods ---- */

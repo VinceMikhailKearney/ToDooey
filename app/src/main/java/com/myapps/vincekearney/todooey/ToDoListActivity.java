@@ -7,6 +7,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -46,7 +48,8 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
 
         // Set content view and assign others
         setContentView(R.layout.activity_to_do_list);
-        ListView toDoList = (ListView) findViewById(R.id.toDoList);
+        RecyclerView toDoList = (RecyclerView) findViewById(R.id.toDoList);
+        toDoList.setHasFixedSize(true);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         this.drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         this.currentToDoList = (TextView) findViewById(R.id.currentToDoList);
@@ -69,10 +72,14 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         this.dbHelper = new ToDoDBHelper(this);
         this.toDoListItems = dbHelper.getAllToDos();
         // ToDoAdapter
-        this.toDoAdapter = new ToDoListAdapter(this, this.toDoListItems);
+        this.toDoAdapter = new ToDoListAdapter(this.toDoListItems);
+        this.toDoAdapter.setToDoList(this.toDoListItems);
         this.toDoAdapter.setToDoListAdapterListener(this);
-        if(toDoList != null)
-            toDoList.setAdapter(this.toDoAdapter);
+//        if(toDoList != null) {
+        toDoList.setLayoutManager(new LinearLayoutManager(this));
+        Log.i(TAG, "Setting adapter for recycler view");
+        toDoList.setAdapter(this.toDoAdapter);
+//        }
         // Delete Dialog
         this.deleteToDoDialog = new DeleteToDoDialog(this);
         this.deleteToDoDialog.setListener(this);
@@ -219,7 +226,6 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         dbHelper.updateCompleted(item.getId(), !item.getCompleted());
         this.toDoListItems = dbHelper.getAllToDos();
         this.toDoAdapter.setToDoList(this.toDoListItems);
-        this.toDoAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -234,7 +240,6 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         dbHelper.toDo(item.getId(), ToDoDBHelper.getOrDelete.DELETE_TODO); // This returns null.
         this.toDoListItems.remove(item);
         this.toDoAdapter.setToDoList(this.toDoListItems);
-        this.toDoAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -243,7 +248,6 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         dbHelper.deleteAllToDos();
         this.toDoListItems = dbHelper.getAllToDos();
         this.toDoAdapter.setToDoList(this.toDoListItems);
-        this.toDoAdapter.notifyDataSetChanged();
     }
 
     /* --- Callback for startActivityForResult() ---- */
@@ -260,7 +264,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
             // Get the string value that has the ID entered in the parameter.
             String toDo = data.getStringExtra(AddToDoActivity.ToDo_Desc);
             this.toDoListItems.add(dbHelper.addToDo(toDo));
-            this.toDoAdapter.notifyDataSetChanged();
+            this.toDoAdapter.setToDoList(this.toDoListItems);
         }
     }
 
