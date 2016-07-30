@@ -32,13 +32,6 @@ public class ToDoListFragment extends android.support.v4.app.Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.to_do_list_fragment, container, false);
-        final Button deleteToDoItems = (Button) view.findViewById(R.id.deleteToDoItems);
-        deleteToDoItems.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteAllToDoItems();
-            }
-        });
 
         RecyclerView toDoList = (RecyclerView) view.findViewById(R.id.toDoList);
         toDoList.setHasFixedSize(true);

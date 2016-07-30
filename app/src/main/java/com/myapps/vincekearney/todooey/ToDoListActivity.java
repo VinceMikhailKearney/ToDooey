@@ -115,6 +115,11 @@ public class ToDoListActivity extends AppCompatActivity
         if (id == R.id.action_settings)
             return true;
 
+        if(id == R.id.action_deleteAllToDos) {
+            this.toDoFragment.deleteAllToDoItems();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
