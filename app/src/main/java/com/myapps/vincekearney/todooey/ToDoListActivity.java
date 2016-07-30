@@ -75,11 +75,9 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         this.toDoAdapter = new ToDoListAdapter(this.toDoListItems);
         this.toDoAdapter.setToDoList(this.toDoListItems);
         this.toDoAdapter.setToDoListAdapterListener(this);
-//        if(toDoList != null) {
         toDoList.setLayoutManager(new LinearLayoutManager(this));
-        Log.i(TAG, "Setting adapter for recycler view");
         toDoList.setAdapter(this.toDoAdapter);
-//        }
+
         // Delete Dialog
         this.deleteToDoDialog = new DeleteToDoDialog(this);
         this.deleteToDoDialog.setListener(this);
