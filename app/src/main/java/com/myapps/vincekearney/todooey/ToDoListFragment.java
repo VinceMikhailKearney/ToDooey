@@ -1,7 +1,6 @@
 package com.myapps.vincekearney.todooey;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,12 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoListAdapterListener, DeleteToDoDialog.DeleteDialogListener
+public class ToDoListFragment extends android.support.v4.app.Fragment implements ToDoListAdapter.ToDoListAdapterListener, DeleteToDoDialog.DeleteDialogListener
 {
     private final int TODO_ADDED = 1;
     private static final String TAG = "ToDoListFragment";
@@ -24,14 +24,22 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
     private DeleteToDoDialog deleteToDoDialog;
     private List<ToDoItem> toDoListItems = new ArrayList<>();
     private TextView currentToDoList;
-    private ToDoDBHelper dbHelper;
-    private ToDoListAdapter toDoAdapter;
+    public ToDoDBHelper dbHelper;
+    public ToDoListAdapter toDoAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.to_do_list_fragment, container, false);
+        final Button deleteToDoItems = (Button) view.findViewById(R.id.deleteToDoItems);
+        deleteToDoItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteAllToDoItems();
+            }
+        });
+
         RecyclerView toDoList = (RecyclerView) view.findViewById(R.id.toDoList);
         toDoList.setHasFixedSize(true);
         this.currentToDoList = (TextView) view.findViewById(R.id.currentToDoList);
@@ -57,8 +65,7 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
 
     /* ---- onClick methods ---- */
     // Delete All
-    public void deleteAllToDoItems(View view)
-    {
+    public void deleteAllToDoItems() {
         this.deleteToDoDialog.setDialogToDo(null).show();
     }
 

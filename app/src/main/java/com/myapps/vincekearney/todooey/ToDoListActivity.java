@@ -3,12 +3,11 @@ package com.myapps.vincekearney.todooey;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -17,26 +16,22 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapter.ToDoListAdapterListener, DeleteToDoDialog.DeleteDialogListener
+public class ToDoListActivity extends AppCompatActivity
 {
     private final int TODO_ADDED = 1;
     private static final String TAG = "ToDoListActivity";
     /* ---- Properties ---- */
     private ActionBar actionBar;
     private ActionBarDrawerToggle drawerToggle;
-    private DeleteToDoDialog deleteToDoDialog;
     private DrawerLayout drawerLayout;
     private List<ToDoItem> toDoListItems = new ArrayList<>();
     private String activityTitle;
-    private TextView currentToDoList;
-    private ToDoDBHelper dbHelper;
-    private ToDoListAdapter toDoAdapter;
+    private ToDoListFragment toDoFragment;
 
     /* --- Lifecycle methods ---- */
     @Override
@@ -48,13 +43,17 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
 
         // Set content view and assign others
         setContentView(R.layout.activity_to_do_list);
-        RecyclerView toDoList = (RecyclerView) findViewById(R.id.toDoList);
-        toDoList.setHasFixedSize(true);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         this.drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        this.currentToDoList = (TextView) findViewById(R.id.currentToDoList);
-        if(this.currentToDoList != null)
-            this.currentToDoList.setText(R.string.all);
+
+        if (findViewById(R.id.fragment_container) != null)
+        {
+            if (savedInstanceState != null)
+                return;
+
+            this.toDoFragment = new ToDoListFragment();
+            this.changeFragment(this.toDoFragment, false);
+        }
 
         // Set up action bar
         setSupportActionBar(toolbar);
@@ -67,20 +66,16 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         // Set up and populate navigation drawer
         this.populateNavDrawer();
         this.setupDrawer();
-        // Set up other
         this.activityTitle = this.getTitle().toString();
-        this.dbHelper = new ToDoDBHelper(this);
-        this.toDoListItems = dbHelper.getAllToDos();
-        // ToDoAdapter
-        this.toDoAdapter = new ToDoListAdapter(this.toDoListItems);
-        this.toDoAdapter.setToDoList(this.toDoListItems);
-        this.toDoAdapter.setToDoListAdapterListener(this);
-        toDoList.setLayoutManager(new LinearLayoutManager(this));
-        toDoList.setAdapter(this.toDoAdapter);
+    }
 
-        // Delete Dialog
-        this.deleteToDoDialog = new DeleteToDoDialog(this);
-        this.deleteToDoDialog.setListener(this);
+    public void changeFragment(android.support.v4.app.Fragment frag, boolean addToBackStack)
+    {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, frag);
+        if(addToBackStack)
+            transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -138,41 +133,6 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         startActivityForResult(addToDoIntent,TODO_ADDED);
     }
 
-    // Delete All
-    public void deleteAllToDoItems(View view)
-    {
-        this.deleteToDoDialog.setDialogToDo(null).show();
-    }
-
-    /* ---- Helper methods ---- */
-    public void refreshToDos(int position)
-    {
-        switch (position)
-        {
-            case 0:
-                this.toDoListItems = dbHelper.getAllToDos();
-                this.currentToDoList.setText(R.string.all);
-                break;
-            case 1:
-                this.toDoListItems = dbHelper.getToDos(true);
-                this.currentToDoList.setText(R.string.completed);
-                break;
-            case 2:
-                this.toDoListItems = dbHelper.getToDos(false);
-                this.currentToDoList.setText(R.string.not_completed);
-                break;
-            case 3:
-                this.toDoListItems = dbHelper.getToDosFromToday();
-                this.currentToDoList.setText(R.string.today);
-                break;
-            default:
-                break;
-        }
-
-        this.toDoAdapter.setToDoList(this.toDoListItems);
-        this.toDoAdapter.notifyDataSetChanged();
-    }
-
     /* ---- Navigation Drawer ---- */
     private void populateNavDrawer()
     {
@@ -184,7 +144,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
             drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    refreshToDos(position);
+                    toDoFragment.refreshToDos(position);
                     drawerLayout.closeDrawers();
                 }
             });
@@ -217,37 +177,6 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         this.drawerLayout.addDrawerListener(this.drawerToggle);
     }
 
-    /* ---- ToDoListAdapterListener methods ---- */
-    @Override
-    public void OnClickItem(ToDoItem item) {
-        Log.i(TAG, "Clicked a check box and received listener event.");
-        dbHelper.updateCompleted(item.getId(), !item.getCompleted());
-        this.toDoListItems = dbHelper.getAllToDos();
-        this.toDoAdapter.setToDoList(this.toDoListItems);
-    }
-
-    @Override
-    public void DeleteItem(ToDoItem item) {
-        this.deleteToDoDialog.setDialogToDo(item).show();
-    }
-
-    // /* ---- DeleteToDoDialogListener methods ---- */
-    @Override
-    public void DeleteToDo(ToDoItem item)
-    {
-        dbHelper.toDo(item.getId(), ToDoDBHelper.getOrDelete.DELETE_TODO); // This returns null.
-        this.toDoListItems.remove(item);
-        this.toDoAdapter.setToDoList(this.toDoListItems);
-    }
-
-    @Override
-    public void DeleteAllToDos()
-    {
-        dbHelper.deleteAllToDos();
-        this.toDoListItems = dbHelper.getAllToDos();
-        this.toDoAdapter.setToDoList(this.toDoListItems);
-    }
-
     /* --- Callback for startActivityForResult() ---- */
     // Passes an Intent with data that we can us.
     @Override
@@ -261,8 +190,8 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoListAdapt
         {
             // Get the string value that has the ID entered in the parameter.
             String toDo = data.getStringExtra(AddToDoActivity.ToDo_Desc);
-            this.toDoListItems.add(dbHelper.addToDo(toDo));
-            this.toDoAdapter.setToDoList(this.toDoListItems);
+            this.toDoListItems.add(this.toDoFragment.dbHelper.addToDo(toDo));
+            this.toDoFragment.toDoAdapter.setToDoList(this.toDoListItems);
         }
     }
 

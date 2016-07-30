@@ -25,8 +25,7 @@
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:padding="5dp"
-                android:onClick="deleteAllToDoItems" />
+                android:padding="5dp" />
 
         </LinearLayout>
 
