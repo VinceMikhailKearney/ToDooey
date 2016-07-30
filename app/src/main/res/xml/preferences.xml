@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:key="pref_sync"
-        android:title="Hello"
-        android:summary="Test"
-        android:defaultValue="true" />
-    <!--<ListPreference-->
-        <!--android:dependency="pref_sync"-->
-        <!--android:key="pref_syncConnectionType"-->
-        <!--android:title="Vince"-->
-        <!--android:dialogTitle="Niamh"-->
-        <!--android:entries="@array/pref_syncConnectionTypes_entries"-->
-        <!--android:entryValues="@array/pref_syncConnectionTypes_values"-->
-        <!--android:defaultValue="@string/pref_syncConnectionTypes_default" />-->
+    <PreferenceCategory
+        android:title="CheckBox Category"
+        android:key="pref_key_hide_completed_settings">
+        <CheckBoxPreference
+            android:key="pref_key_hide"
+            android:summary="Hide Items Once Completed"
+            android:title="Hide Completed "
+            android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="pref_key_hide_all"
+            android:dependency="pref_key_hide"
+            android:summary="Hide Items Once Completed In Section All"
+            android:title="Hide In All "
+            android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="pref_key_hide_completed"
+            android:dependency="pref_key_hide"
+            android:summary="Hide Items Once Completed In Section Completed"
+            android:title="Hide In Completed "
+            android:defaultValue="false" />
+    </PreferenceCategory>
 </PreferenceScreen>

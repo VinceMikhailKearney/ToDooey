@@ -1,8 +1,11 @@
 package com.myapps.vincekearney.todooey;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,28 +13,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToDoListFragment extends android.support.v4.app.Fragment implements ToDoListAdapter.ToDoListAdapterListener, DeleteToDoDialog.DeleteDialogListener
+public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoListAdapterListener, DeleteToDoDialog.DeleteDialogListener
 {
     private final int TODO_ADDED = 1;
     private static final String TAG = "ToDoListFragment";
+    private static final String KEY_HIDE = "pref_key_hide";
+    private static final String KEY_HIDE_ALL = "pref_key_hide_all";
+    private static final String KEY_HIDE_COMPLETED = "pref_key_hide_completed";
     /* ---- Properties ---- */
     private DeleteToDoDialog deleteToDoDialog;
     private List<ToDoItem> toDoListItems = new ArrayList<>();
     private TextView currentToDoList;
     public ToDoDBHelper dbHelper;
     public ToDoListAdapter toDoAdapter;
+    private SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.to_do_list_fragment, container, false);
+
+         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         RecyclerView toDoList = (RecyclerView) view.findViewById(R.id.toDoList);
         toDoList.setHasFixedSize(true);

@@ -1,9 +1,10 @@
 package com.myapps.vincekearney.todooey;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -46,6 +47,8 @@ public class ToDoListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         this.drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
         if (findViewById(R.id.fragment_container) != null)
         {
             if (savedInstanceState != null)
@@ -69,13 +72,13 @@ public class ToDoListActivity extends AppCompatActivity
         this.activityTitle = this.getTitle().toString();
     }
 
-    public void changeFragment(android.support.v4.app.Fragment frag, boolean addToBackStack)
+    public void changeFragment(Fragment frag, boolean addToBackStack)
     {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, frag);
+        android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, frag);
         if(addToBackStack)
-            transaction.addToBackStack(null);
-        transaction.commit();
+            fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -112,8 +115,10 @@ public class ToDoListActivity extends AppCompatActivity
             return true;
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
+        if (id == R.id.action_settings) {
+            this.changeFragment(new SettingsFragment(), true);
             return true;
+        }
 
         if(id == R.id.action_deleteAllToDos) {
             this.toDoFragment.deleteAllToDoItems();
