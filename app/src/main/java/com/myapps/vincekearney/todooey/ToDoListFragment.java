@@ -56,13 +56,6 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
     }
 
     /* ---- onClick methods ---- */
-    // FAB
-    public void startIntent(View view)
-    {
-        Intent addToDoIntent = new Intent(getActivity(), AddToDoActivity.class);
-        startActivityForResult(addToDoIntent,TODO_ADDED);
-    }
-
     // Delete All
     public void deleteAllToDoItems(View view)
     {
@@ -131,6 +124,8 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
 
     /* --- Callback for startActivityForResult() ---- */
     // Passes an Intent with data that we can us.
+    // THE ACTIVITY STILL STARTS THE INTENT AND HANDLES THIS - Need to figure out
+    // how to get it here instead.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
