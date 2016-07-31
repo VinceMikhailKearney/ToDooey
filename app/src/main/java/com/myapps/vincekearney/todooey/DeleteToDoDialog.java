@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class DeleteToDoDialog extends AlertDialog
 {
     /* ---- Properties ---- */
@@ -41,6 +43,35 @@ public class DeleteToDoDialog extends AlertDialog
         setButton(BUTTON_NEGATIVE, this.getContext().getString(R.string.cancel), (OnClickListener)null);
 
         return this;
+    }
+
+    public void showSweetAlert()
+    {
+        new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText("Won't be able to recover this file!")
+                .setCancelText("Cancel")
+                .setConfirmText("Yes,delete it!")
+                .showCancelButton(true)
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.cancel();
+                    }
+                })
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener()
+                {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog)
+                    {
+                        sDialog.setTitleText("Deleted!")
+                                .setContentText("Your imaginary file has been deleted!")
+                                .setConfirmText("OK")
+                                .showCancelButton(false)
+                                .setConfirmClickListener(null)
+                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                    }
+                }).show();
     }
 
     public void setListener(DeleteDialogListener listener) {

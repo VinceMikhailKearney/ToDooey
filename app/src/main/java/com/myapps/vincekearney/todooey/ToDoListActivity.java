@@ -1,6 +1,7 @@
 package com.myapps.vincekearney.todooey;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -74,7 +75,7 @@ public class ToDoListActivity extends AppCompatActivity
 
     public void changeFragment(Fragment frag, boolean addToBackStack)
     {
-        android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, frag);
         if(addToBackStack)
             fragmentTransaction.addToBackStack(null);
