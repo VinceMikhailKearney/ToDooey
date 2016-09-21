@@ -49,8 +49,8 @@ public class DBManager extends SQLiteOpenHelper
     {
         // If we ever upgrade, which we won't for now, we do the shiz here.
         Log.w(DBManager.class.getName(), "Upgrading DB from " + oldVersion + " to " + newVersion);
-        db.execSQL("DROP TABLE IF EXISTS " + TO_DO_ITEMS_TABlE);
-        onCreate(db);
+        db.execSQL("ALTER TABLE " + TO_DO_ITEMS_TABlE);
+        // Then anything else like ADD/DELETE/MODIFY columns in table
     }
     /* ===============END OF CLASS=============== */
 }
