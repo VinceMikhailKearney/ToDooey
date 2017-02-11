@@ -134,21 +134,21 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
     // Passes an Intent with data that we can us.
     // THE ACTIVITY STILL STARTS THE INTENT AND HANDLES THIS - Need to figure out
     // how to get it here instead.
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "Got a result back from the add activity.");
-        // We need to make sure the requestCode matches the task that we asked for above.
-        // If result is OK - We have something we need to look at.
-        if (requestCode == TODO_ADDED && resultCode == Activity.RESULT_OK)
-        {
-            // Get the string value that has the ID entered in the parameter.
-            String toDo = data.getStringExtra(AddToDoActivity.ToDo_Desc);
-            this.toDoListItems.add(dbHelper.addToDo(toDo));
-            this.toDoAdapter.setToDoList(this.toDoListItems);
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data)
+//    {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Log.i(TAG, "Got a result back from the add activity.");
+//        // We need to make sure the requestCode matches the task that we asked for above.
+//        // If result is OK - We have something we need to look at.
+//        if (requestCode == TODO_ADDED && resultCode == Activity.RESULT_OK)
+//        {
+//            // Get the string value that has the ID entered in the parameter.
+//            String to_Do = data.getStringExtra(AddToDoActivity.ToDo_Desc);
+//            this.toDoListItems.add(dbHelper.addToDo(to_Do));
+//            this.toDoAdapter.setToDoList(this.toDoListItems);
+//        }
+//    }
 
     /* ===============END OF CLASS=============== */
 }

@@ -31,9 +31,9 @@ public class ToDoListActivity extends AppCompatActivity
     private ActionBar actionBar;
     private ActionBarDrawerToggle drawerToggle;
     private DrawerLayout drawerLayout;
-    private List<ToDoItem> toDoListItems = new ArrayList<>();
     private String activityTitle;
     private ToDoListFragment toDoFragment;
+    private int drawerPosition;
 
     /* --- Lifecycle methods ---- */
     @Override
@@ -47,6 +47,8 @@ public class ToDoListActivity extends AppCompatActivity
         setContentView(R.layout.activity_to_do_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         this.drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+
+        this.drawerPosition = 0;
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -123,6 +125,7 @@ public class ToDoListActivity extends AppCompatActivity
 
         if(id == R.id.action_deleteAllToDos) {
             this.toDoFragment.deleteAllToDoItems();
+            this.toDoFragment.refreshToDos(this.drawerPosition);
             return true;
         }
 
@@ -166,7 +169,6 @@ public class ToDoListActivity extends AppCompatActivity
     {
         this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, R.string.drawer_open, R.string.drawer_close)
         {
-
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView)
             {
@@ -200,9 +202,8 @@ public class ToDoListActivity extends AppCompatActivity
         if (requestCode == TODO_ADDED && resultCode == RESULT_OK)
         {
             // Get the string value that has the ID entered in the parameter.
-            String toDo = data.getStringExtra(AddToDoActivity.ToDo_Desc);
-            this.toDoListItems.add(this.toDoFragment.dbHelper.addToDo(toDo));
-            this.toDoFragment.toDoAdapter.setToDoList(this.toDoListItems);
+            this.toDoFragment.dbHelper.addToDo(data.getStringExtra(AddToDoActivity.ToDo_Desc));
+            this.toDoFragment.refreshToDos(this.drawerPosition);
         }
     }
 
