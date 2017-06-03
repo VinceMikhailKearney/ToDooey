@@ -37,7 +37,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoVi
     }
 
     public void setToDoList(List<ToDoItem> list) {
-        Log.i(TAG, "Setting to do list for adapter");
+        Log.i(TAG, "Setting to do list on the adapter");
         this.todoList = list;
         this.notifyDataSetChanged();
     }

@@ -13,10 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.myapps.vincekearney.todooey.Database.ToDoDBHelper;
+import com.myapps.vincekearney.todooey.Database.DatabaseManager;
 import com.myapps.vincekearney.todooey.Database.ToDoItem;
 import com.myapps.vincekearney.todooey.DeleteToDoDialog;
 import com.myapps.vincekearney.todooey.R;
+import com.myapps.vincekearney.todooey.ToDoApplication;
 import com.myapps.vincekearney.todooey.ToDoListAdapter;
 
 import java.util.ArrayList;
@@ -31,7 +32,6 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
     private DeleteToDoDialog deleteToDoDialog;
     private List<ToDoItem> toDoListItems = new ArrayList<>();
     private TextView currentToDoList;
-    public ToDoDBHelper dbHelper;
     public ToDoListAdapter toDoAdapter;
     private SharedPreferences sharedPreferences;
 
@@ -56,10 +56,12 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
         toDoList.setAdapter(this.toDoAdapter);
 
         // Set up other
-        this.dbHelper = new ToDoDBHelper(getActivity());
+        Log.i(TAG, "About to try and refresh the ToDos here");
         this.refreshToDos(0); // The default list, at the minute, is ALL. So refresh for this.
+        Log.i(TAG, "Well? Did we?");
 
         // Delete Dialog
+        // https://stackoverflow.com/questions/7933206/android-unable-to-add-window-token-null-is-not-for-an-application-exception
         this.deleteToDoDialog = new DeleteToDoDialog(getActivity());
         this.deleteToDoDialog.setListener(this);
 
@@ -79,21 +81,21 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
         {
             case 0:
                 if(this.sharedPreferences.getBoolean(KEY_HIDE_ALL,false) == true)
-                    this.toDoListItems = dbHelper.getToDos(false);
+                    this.toDoListItems = DatabaseManager.toDoItemHelper().getToDosCompleted(false);
                 else
-                    this.toDoListItems = dbHelper.getAllToDos();
+                    this.toDoListItems = DatabaseManager.toDoItemHelper().getAllToDos();
                 this.currentToDoList.setText(R.string.all);
                 break;
             case 1:
-                this.toDoListItems = dbHelper.getToDos(true);
+                this.toDoListItems = DatabaseManager.toDoItemHelper().getToDosCompleted(true);
                 this.currentToDoList.setText(R.string.completed);
                 break;
             case 2:
-                this.toDoListItems = dbHelper.getToDos(false);
+                this.toDoListItems = DatabaseManager.toDoItemHelper().getToDosCompleted(false);
                 this.currentToDoList.setText(R.string.not_completed);
                 break;
             case 3:
-                this.toDoListItems = dbHelper.getToDosFromToday();
+                this.toDoListItems = DatabaseManager.toDoItemHelper().getToDosFromToday();
                 this.currentToDoList.setText(R.string.today);
                 break;
             default:
@@ -108,8 +110,8 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
     @Override
     public void OnClickItem(ToDoItem item) {
         Log.i(TAG, "Clicked a check box and received listener event.");
-        dbHelper.updateCompleted(item.getId(), !item.getCompleted());
-        this.toDoListItems = dbHelper.getAllToDos();
+        DatabaseManager.toDoItemHelper().updateCompleted(item.getId(), !item.getCompleted());
+        this.toDoListItems = DatabaseManager.toDoItemHelper().getAllToDos();
         this.toDoAdapter.setToDoList(this.toDoListItems);
     }
 
@@ -123,7 +125,7 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
     @Override
     public void DeleteToDo(ToDoItem item)
     {
-        dbHelper.toDo(item.getId(), ToDoDBHelper.getOrDelete.DELETE_TODO); // This returns null.
+        DatabaseManager.toDoItemHelper().deleteToDo(item.getId());
         this.toDoListItems.remove(item);
         this.toDoAdapter.setToDoList(this.toDoListItems);
     }
@@ -131,8 +133,8 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
     @Override
     public void DeleteAllToDos()
     {
-        dbHelper.deleteAllToDos();
-        this.toDoListItems = dbHelper.getAllToDos();
+        DatabaseManager.toDoItemHelper().deleteAll();
+        this.toDoListItems = DatabaseManager.toDoItemHelper().getAllToDos();
         this.toDoAdapter.setToDoList(this.toDoListItems);
     }
 

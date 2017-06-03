@@ -18,7 +18,7 @@ public class DeleteToDoDialog extends AlertDialog {
     }
 
     /* ---- Constructor ---- */
-    protected DeleteToDoDialog(Context context) {
+    public DeleteToDoDialog(Context context) {
         super(context);
     }
 

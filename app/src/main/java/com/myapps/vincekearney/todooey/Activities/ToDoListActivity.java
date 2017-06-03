@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.myapps.vincekearney.todooey.Database.DatabaseManager;
 import com.myapps.vincekearney.todooey.R;
 import com.myapps.vincekearney.todooey.Fragments.SettingsFragment;
 import com.myapps.vincekearney.todooey.Fragments.ToDoListFragment;
@@ -203,7 +204,7 @@ public class ToDoListActivity extends AppCompatActivity
         if (requestCode == TODO_ADDED && resultCode == RESULT_OK)
         {
             // Get the string value that has the ID entered in the parameter.
-            this.toDoFragment.dbHelper.addToDo(data.getStringExtra(AddToDoActivity.ToDo_Desc));
+            DatabaseManager.toDoItemHelper().addToDo(data.getStringExtra(AddToDoActivity.ToDo_Desc));
             this.toDoFragment.refreshToDos(this.drawerPosition);
         }
     }
