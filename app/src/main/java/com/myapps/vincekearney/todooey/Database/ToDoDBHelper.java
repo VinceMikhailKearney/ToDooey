@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class ToDoDBHelper extends DBManager
+public class ToDoDBHelper extends Database
 {
     public enum getOrDelete { FETCH_TODO , DELETE_TODO }
     private static final String TAG = "ToDoDataBaseHelper";
@@ -166,7 +166,7 @@ public class ToDoDBHelper extends DBManager
     }
 
     public void closeDBManger() {
-        // Need to close down the DBManager (SQLiteOpenHelper).
+        // Need to close down the Database (SQLiteOpenHelper).
         super.close();
     }
 

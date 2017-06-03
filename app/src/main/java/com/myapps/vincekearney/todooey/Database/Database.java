@@ -5,10 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class DBManager extends SQLiteOpenHelper
+public class Database extends SQLiteOpenHelper
 {
     /* ---- TAG and Helper strings ---- */
-    private static final String TAG = "DBManager";
+    private static final String TAG = "Database";
     private static final String TYPE_TEXT = "TEXT";
     private static final String TYPE_INTEGER = "INTEGER";
     private static final String formatTextType = String.format(" %s, ",TYPE_TEXT);
@@ -31,10 +31,10 @@ public class DBManager extends SQLiteOpenHelper
                     + COLUMN_NAME_COMPLETED + formatIntegerType
                     + COLUMN_NAME_DATE + formatTextTypeEnd + ")";
 
-    public DBManager(Context context)
+    public Database(Context context)
     {
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
-        Log.i(TAG, "Setting up DBManager.");
+        Log.i(TAG, "Setting up Database.");
     }
 
     @Override
@@ -48,7 +48,7 @@ public class DBManager extends SQLiteOpenHelper
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
         // If we ever upgrade, which we won't for now, we do the shiz here.
-        Log.w(DBManager.class.getName(), "Upgrading DB from " + oldVersion + " to " + newVersion);
+        Log.w(Database.class.getName(), "Upgrading DB from " + oldVersion + " to " + newVersion);
         db.execSQL("ALTER TABLE " + TO_DO_ITEMS_TABlE);
         // Then anything else like ADD/DELETE/MODIFY columns in table
     }
