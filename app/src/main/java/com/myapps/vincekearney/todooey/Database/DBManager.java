@@ -1,4 +1,4 @@
-package com.myapps.vincekearney.todooey;
+package com.myapps.vincekearney.todooey.Database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

@@ -1,4 +1,4 @@
-package com.myapps.vincekearney.todooey;
+package com.myapps.vincekearney.todooey.Activities;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -20,8 +20,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.myapps.vincekearney.todooey.R;
+import com.myapps.vincekearney.todooey.Fragments.SettingsFragment;
+import com.myapps.vincekearney.todooey.Fragments.ToDoListFragment;
 
 public class ToDoListActivity extends AppCompatActivity
 {

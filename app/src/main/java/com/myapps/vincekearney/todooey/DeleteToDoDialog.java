@@ -3,6 +3,8 @@ package com.myapps.vincekearney.todooey;
 import android.app.AlertDialog;
 import android.content.Context;
 
+import com.myapps.vincekearney.todooey.Database.ToDoItem;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class DeleteToDoDialog extends AlertDialog {

@@ -1,4 +1,4 @@
-package com.myapps.vincekearney.todooey;
+package com.myapps.vincekearney.todooey.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import android.view.View;
+
+import com.myapps.vincekearney.todooey.R;
 
 public class AddToDoActivity extends AppCompatActivity
 {

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.myapps.vincekearney.todooey.Database.ToDoItem;
+
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;

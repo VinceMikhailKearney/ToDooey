@@ -1,7 +1,9 @@
-package com.myapps.vincekearney.todooey;
+package com.myapps.vincekearney.todooey.Fragments;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+
+import com.myapps.vincekearney.todooey.R;
 
 public class SettingsFragment extends PreferenceFragment
 {
