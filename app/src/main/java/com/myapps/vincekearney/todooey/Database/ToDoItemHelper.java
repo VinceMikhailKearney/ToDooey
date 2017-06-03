@@ -25,10 +25,10 @@ public class ToDoItemHelper extends DatabaseManager {
 
         String toDoID = UUID.randomUUID().toString();
         ContentValues toDoValues = new ContentValues();
-        toDoValues.put(getLocalDatabase().COLUMN_NAME_TODO_ID, toDoID);
-        toDoValues.put(getLocalDatabase().COLUMN_NAME_TODO_TEXT, text);
-        toDoValues.put(getLocalDatabase().COLUMN_NAME_COMPLETED, 0);
-        toDoValues.put(getLocalDatabase().COLUMN_NAME_DATE, Long.toString(new Date().getTime()));
+        toDoValues.put(getLocalDatabase().TODO_ID, toDoID);
+        toDoValues.put(getLocalDatabase().TODO_TEXT, text);
+        toDoValues.put(getLocalDatabase().COMPLETED, 0);
+        toDoValues.put(getLocalDatabase().DATE, Long.toString(new Date().getTime()));
 
         add(toDoValues);
         return fetchToDo(toDoID);
@@ -37,13 +37,13 @@ public class ToDoItemHelper extends DatabaseManager {
     /* ---- Update methods ---- */
     public void updateCompleted(String id, Boolean completed) {
         Log.i(TAG, "ToDo ID: " + id + "\nCompleted: " + completed);
-        String searchString = String.format("%s = %s%s%s", getLocalDatabase().COLUMN_NAME_TODO_ID, "'", id, "'");
-        update(newValues(getLocalDatabase().COLUMN_NAME_COMPLETED, completed), searchString);
+        String searchString = String.format("%s = %s%s%s", getLocalDatabase().TODO_ID, "'", id, "'");
+        update(newValues(getLocalDatabase().COMPLETED, completed), searchString);
     }
 
     /* ---- Fetch methods ---- */
     public ToDoItem fetchToDo(String id) {
-        setSearchingForString(getLocalDatabase().COLUMN_NAME_TODO_ID);
+        setSearchingForString(getLocalDatabase().TODO_ID);
         return (ToDoItem) fetchSingleItem(id);
     }
 
@@ -54,7 +54,7 @@ public class ToDoItemHelper extends DatabaseManager {
 
     public List<ToDoItem> getToDosCompleted(Boolean completed) {
         Log.i(TAG, "Asking for todos completed: " + completed);
-        setSearchingForString(getLocalDatabase().COLUMN_NAME_COMPLETED);
+        setSearchingForString(getLocalDatabase().COMPLETED);
         return (List<ToDoItem>)(List<?>) getObjectsWithQuery(completed ? "1" : "0");
     }
 
@@ -70,7 +70,7 @@ public class ToDoItemHelper extends DatabaseManager {
 
     /* ---- Delete methods ---- */
     public void deleteToDo(String id) {
-        setSearchingForString(getLocalDatabase().COLUMN_NAME_TODO_ID);
+        setSearchingForString(getLocalDatabase().TODO_ID);
         delete(id);
     }
 

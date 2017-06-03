@@ -18,17 +18,17 @@ public class Database extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "ToDooey.db";
     /* ---- Table and Columns (in order) ---- */
     public final String TO_DO_ITEMS_TABlE = "ToDoItems";
-    public final String COLUMN_NAME_TODO_ID = "todoid";
-    public final String COLUMN_NAME_TODO_TEXT = "todotext";
-    public final String COLUMN_NAME_COMPLETED = "completed";
-    public final String COLUMN_NAME_DATE = "date";
+    public final String TODO_ID = "todoid";
+    public final String TODO_TEXT = "todotext";
+    public final String COMPLETED = "completed";
+    public final String DATE = "date";
     /* ---- Create table SQL string ---- */
     private final String CREATE_DATABASE =
             "CREATE TABLE IF NOT EXISTS " + TO_DO_ITEMS_TABlE + "("
-                    + COLUMN_NAME_TODO_ID + formatTextType
-                    + COLUMN_NAME_TODO_TEXT + formatTextType
-                    + COLUMN_NAME_COMPLETED + formatIntegerType
-                    + COLUMN_NAME_DATE + formatTextTypeEnd + ")";
+                    + TODO_ID + formatTextType
+                    + TODO_TEXT + formatTextType
+                    + COMPLETED + formatIntegerType
+                    + DATE + formatTextTypeEnd + ")";
 
     /**
      * Above ^^^
