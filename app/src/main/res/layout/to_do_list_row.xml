@@ -12,7 +12,7 @@
             android:id="@+id/checkBox"
             android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:text="New CheckBox"
             android:gravity="center_vertical"/>
 
@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Today"
-            android:textAlignment="viewEnd"
+            android:textAlignment="textEnd"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:gravity="center_vertical" />
 
