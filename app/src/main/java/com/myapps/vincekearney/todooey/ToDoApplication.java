@@ -2,7 +2,6 @@ package com.myapps.vincekearney.todooey;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import com.myapps.vincekearney.todooey.Database.Database;
 import com.myapps.vincekearney.todooey.Database.ToDoItemHelper;

@@ -61,5 +61,4 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("ALTER TABLE " + TO_DO_ITEMS_TABlE);
         // Then anything else like ADD/DELETE/MODIFY columns in table
     }
-    /* ===============END OF CLASS=============== */
 }

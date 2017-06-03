@@ -25,8 +25,7 @@ import com.myapps.vincekearney.todooey.R;
 import com.myapps.vincekearney.todooey.Fragments.SettingsFragment;
 import com.myapps.vincekearney.todooey.Fragments.ToDoListFragment;
 
-public class ToDoListActivity extends AppCompatActivity
-{
+public class ToDoListActivity extends AppCompatActivity {
     private final int TODO_ADDED = 1;
     private static final String TAG = "ToDoListActivity";
     /* ---- Properties ---- */
@@ -39,8 +38,7 @@ public class ToDoListActivity extends AppCompatActivity
 
     /* --- Lifecycle methods ---- */
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Here we are telling the app that we want to be full screen - I.e. The menu bar at the top is gone (date and battery thang).
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -48,14 +46,13 @@ public class ToDoListActivity extends AppCompatActivity
         // Set content view and assign others
         setContentView(R.layout.activity_to_do_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        this.drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        this.drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         this.drawerPosition = 0;
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        if (findViewById(R.id.fragment_container) != null)
-        {
+        if (findViewById(R.id.fragment_container) != null) {
             if (savedInstanceState != null)
                 return;
 
@@ -66,7 +63,7 @@ public class ToDoListActivity extends AppCompatActivity
         // Set up action bar
         setSupportActionBar(toolbar);
         this.actionBar = getSupportActionBar();
-        if(this.actionBar != null) {
+        if (this.actionBar != null) {
             this.actionBar.setDisplayHomeAsUpEnabled(true);
             this.actionBar.setHomeButtonEnabled(true);
         }
@@ -77,25 +74,22 @@ public class ToDoListActivity extends AppCompatActivity
         this.activityTitle = this.getTitle().toString();
     }
 
-    public void changeFragment(Fragment frag, boolean addToBackStack)
-    {
+    public void changeFragment(Fragment frag, boolean addToBackStack) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, frag);
-        if(addToBackStack)
+        if (addToBackStack)
             fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState)
-    {
+    protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         this.drawerToggle.syncState();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_to_do_list, menu);
         return true;
@@ -103,15 +97,14 @@ public class ToDoListActivity extends AppCompatActivity
 
     // Selecting something in the Menu
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         // If the navigation drawer is not set up - Let's just catch the NPE here.
-        if(this.drawerToggle == null) {
+        if (this.drawerToggle == null) {
             Toast.makeText(ToDoListActivity.this, "The drawer toggle is null. Would throw NPE.", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -119,13 +112,12 @@ public class ToDoListActivity extends AppCompatActivity
         if (this.drawerToggle.onOptionsItemSelected(item))
             return true;
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             this.changeFragment(new SettingsFragment(), true);
             return true;
         }
 
-        if(id == R.id.action_deleteAllToDos) {
+        if (id == R.id.action_deleteAllToDos) {
             this.toDoFragment.deleteAllToDoItems();
             this.toDoFragment.refreshToDos(this.drawerPosition);
             return true;
@@ -143,19 +135,17 @@ public class ToDoListActivity extends AppCompatActivity
 
     /* ---- onClick methods ---- */
     // FAB
-    public void startIntent(View view)
-    {
+    public void startIntent(View view) {
         Intent addToDoIntent = new Intent(ToDoListActivity.this, AddToDoActivity.class);
-        startActivityForResult(addToDoIntent,TODO_ADDED);
+        startActivityForResult(addToDoIntent, TODO_ADDED);
     }
 
     /* ---- Navigation Drawer ---- */
-    private void populateNavDrawer()
-    {
+    private void populateNavDrawer() {
         ListView drawerList = (ListView) findViewById(R.id.navList);
-        String[] osArray = { "All", "Completed", "Not Completed", "Today" };
+        String[] osArray = {"All", "Completed", "Not Completed", "Today"};
         ArrayAdapter<String> navAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, osArray);
-        if(drawerList != null) {
+        if (drawerList != null) {
             drawerList.setAdapter(navAdapter);
             drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -167,23 +157,19 @@ public class ToDoListActivity extends AppCompatActivity
         }
     }
 
-    private void setupDrawer()
-    {
-        this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, R.string.drawer_open, R.string.drawer_close)
-        {
+    private void setupDrawer() {
+        this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, R.string.drawer_open, R.string.drawer_close) {
             /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView)
-            {
+            public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                if(actionBar != null) actionBar.setTitle(R.string.choose_to_do_list);
+                if (actionBar != null) actionBar.setTitle(R.string.choose_to_do_list);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view)
-            {
+            public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                if(actionBar != null) actionBar.setTitle(activityTitle);
+                if (actionBar != null) actionBar.setTitle(activityTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -193,21 +179,17 @@ public class ToDoListActivity extends AppCompatActivity
     }
 
     /* --- Callback for startActivityForResult() ---- */
-    // Passes an Intent with data that we can us.
+    // Passes an Intent with data that can be used.
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i(TAG, "Got a result back from the add activity.");
         // We need to make sure the requestCode matches the task that we asked for above.
         // If result is OK - We have something we need to look at.
-        if (requestCode == TODO_ADDED && resultCode == RESULT_OK)
-        {
+        if (requestCode == TODO_ADDED && resultCode == RESULT_OK) {
             // Get the string value that has the ID entered in the parameter.
             DatabaseManager.toDoItemHelper().addToDo(data.getStringExtra(AddToDoActivity.ToDo_Desc));
             this.toDoFragment.refreshToDos(this.drawerPosition);
         }
     }
-
-    /* ===============END OF CLASS=============== */
 }

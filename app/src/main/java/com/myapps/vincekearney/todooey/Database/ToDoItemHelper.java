@@ -19,7 +19,6 @@ public class ToDoItemHelper extends DatabaseManager {
         setLocalTableName(getLocalDatabase().TO_DO_ITEMS_TABlE);
     }
 
-    /* ---- Adding methods ---- */
     public ToDoItem addToDo(String text) {
         Log.i(TAG, "Adding a ToDo item.");
 
@@ -34,7 +33,6 @@ public class ToDoItemHelper extends DatabaseManager {
         return fetchToDo(toDoID);
     }
 
-    /* ---- Update methods ---- */
     public void updateCompleted(String id, Boolean completed) {
         Log.i(TAG, "ToDo ID: " + id + "\nCompleted: " + completed);
         String searchString = String.format("%s = %s%s%s", getLocalDatabase().TODO_ID, "'", id, "'");
@@ -49,19 +47,19 @@ public class ToDoItemHelper extends DatabaseManager {
 
     public List<ToDoItem> getAllToDos() {
         Log.i(TAG, "Asking for all ToDo items.");
-        return (List<ToDoItem>)(List<?>) getObjectsWithQuery(null);
+        return (List<ToDoItem>) (List<?>) getObjectsWithQuery(null);
     }
 
     public List<ToDoItem> getToDosCompleted(Boolean completed) {
         Log.i(TAG, "Asking for todos completed: " + completed);
         setSearchingForString(getLocalDatabase().COMPLETED);
-        return (List<ToDoItem>)(List<?>) getObjectsWithQuery(completed ? "1" : "0");
+        return (List<ToDoItem>) (List<?>) getObjectsWithQuery(completed ? "1" : "0");
     }
 
     public List<ToDoItem> getToDosFromToday() {
         Log.i(TAG, "Asking for all ToDo items that were made today.");
         List<ToDoItem> toDosToday = new ArrayList<>();
-        for (ToDoItem item : (List<ToDoItem>)(List<?>) getObjectsWithQuery(null)) {
+        for (ToDoItem item : (List<ToDoItem>) (List<?>) getObjectsWithQuery(null)) {
             if (DateUtils.isToday(item.getDate().getTime()))
                 toDosToday.add(item);
         }
@@ -90,6 +88,4 @@ public class ToDoItemHelper extends DatabaseManager {
         todo.setDate(new Date(Long.parseLong(cursor.getString(3))));
         return todo;
     }
-
-    /* ===============END OF CLASS=============== */
 }

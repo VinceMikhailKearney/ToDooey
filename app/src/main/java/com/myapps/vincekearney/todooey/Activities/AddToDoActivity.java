@@ -10,29 +10,24 @@ import android.view.View;
 
 import com.myapps.vincekearney.todooey.R;
 
-public class AddToDoActivity extends AppCompatActivity
-{
+public class AddToDoActivity extends AppCompatActivity {
     public static final String ToDo_Desc = "todo";
     /* ---- Properties ---- */
-    private EditText descView;
+    private EditText toDoText;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Set content view and assign desc view
         setContentView(R.layout.activity_add_to_do);
-        this.descView = (EditText) findViewById(R.id.toDoText);
+        this.toDoText = (EditText) findViewById(R.id.toDoText);
 
-        // Add an OnKeyListener to the descView.
+        // Add an OnKeyListener to the toDoText.
         // This essentially adds a listener to any key press on the keyboard. I am interested if the 'Enter' button is pressed down.
-        this.descView.setOnKeyListener(new View.OnKeyListener()
-        {
-            public boolean onKey(View v, int keyCode, KeyEvent event)
-            {
-                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER)
-                {
+        this.toDoText.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                     addToDoClicked(v);
                     return true;
                 }
@@ -41,23 +36,21 @@ public class AddToDoActivity extends AppCompatActivity
         });
     }
 
-    public void addToDoClicked(View view)
-    {
-        // Here we need to get the text from the text view
-        String toDo = this.descView.getText().toString();
+    public void addToDoClicked(View view) {
+        String toDo = this.toDoText.getText().toString();
 
-        if(toDo.isEmpty())
-        {
+        if (toDo.isEmpty()) {
             Log.i("AddToDo", "To do text empty");
-            // As the to do item is empty we are simply cancelling. Set the result code to cancelled.
+            /** As the to do item is empty we are simply cancelling.
+             * Set the result code to cancelled.
+             */
             setResult(RESULT_CANCELED);
-        }
-        else
-        {
+        } else {
             Log.i("AddToDo", "We got text");
-            // Here we have data that we want to pass back.
-            // We create an Intent that is used to hold the data and set the result code
-            // to OK to indicate that there is something we need to look at.
+            /** Here we have data that we want to pass back.
+             * We create an Intent that is used to hold the data and set the result code
+             * to OK to indicate that there is something we need to look at.
+             */
             Intent result = new Intent();
             result.putExtra(ToDo_Desc, toDo);
             setResult(RESULT_OK, result);

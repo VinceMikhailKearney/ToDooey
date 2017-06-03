@@ -17,14 +17,12 @@ import com.myapps.vincekearney.todooey.Database.DatabaseManager;
 import com.myapps.vincekearney.todooey.Database.ToDoItem;
 import com.myapps.vincekearney.todooey.DeleteToDoDialog;
 import com.myapps.vincekearney.todooey.R;
-import com.myapps.vincekearney.todooey.ToDoApplication;
 import com.myapps.vincekearney.todooey.ToDoListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoListAdapterListener, DeleteToDoDialog.DeleteDialogListener
-{
+public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoListAdapterListener, DeleteToDoDialog.DeleteDialogListener {
     // private final int TODO_ADDED = 1; This is still in the MainActivity
     private static final String TAG = "ToDoListFragment";
     private static final String KEY_HIDE_ALL = "pref_key_hide_all";
@@ -37,8 +35,7 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.to_do_list_fragment, container, false);
 
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -46,7 +43,7 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
         RecyclerView toDoList = (RecyclerView) view.findViewById(R.id.toDoList);
         toDoList.setHasFixedSize(true);
         this.currentToDoList = (TextView) view.findViewById(R.id.currentToDoList);
-        if(this.currentToDoList != null)
+        if (this.currentToDoList != null)
             this.currentToDoList.setText(R.string.all);
 
         // ToDoAdapter
@@ -69,18 +66,15 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
     }
 
     /* ---- onClick methods ---- */
-    // Delete All
     public void deleteAllToDoItems() {
         this.deleteToDoDialog.showAlert(null);
     }
 
     /* ---- Helper methods ---- */
-    public void refreshToDos(int position)
-    {
-        switch (position)
-        {
+    public void refreshToDos(int position) {
+        switch (position) {
             case 0:
-                if(this.sharedPreferences.getBoolean(KEY_HIDE_ALL,false) == true)
+                if (this.sharedPreferences.getBoolean(KEY_HIDE_ALL, false) == true)
                     this.toDoListItems = DatabaseManager.toDoItemHelper().getToDosCompleted(false);
                 else
                     this.toDoListItems = DatabaseManager.toDoItemHelper().getAllToDos();
@@ -118,21 +112,18 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
     @Override
     public void DeleteItem(ToDoItem item) {
         this.deleteToDoDialog.showAlert(item);
-//        this.deleteToDoDialog.setDialogToDo(item).show();
     }
 
-    // /* ---- DeleteToDoDialogListener methods ---- */
+    /* ---- DeleteToDoDialogListener methods ---- */
     @Override
-    public void DeleteToDo(ToDoItem item)
-    {
+    public void DeleteToDo(ToDoItem item) {
         DatabaseManager.toDoItemHelper().deleteToDo(item.getId());
         this.toDoListItems.remove(item);
         this.toDoAdapter.setToDoList(this.toDoListItems);
     }
 
     @Override
-    public void DeleteAllToDos()
-    {
+    public void DeleteAllToDos() {
         DatabaseManager.toDoItemHelper().deleteAll();
         this.toDoListItems = DatabaseManager.toDoItemHelper().getAllToDos();
         this.toDoAdapter.setToDoList(this.toDoListItems);
@@ -157,6 +148,4 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
 //            this.toDoAdapter.setToDoList(this.toDoListItems);
 //        }
 //    }
-
-    /* ===============END OF CLASS=============== */
 }

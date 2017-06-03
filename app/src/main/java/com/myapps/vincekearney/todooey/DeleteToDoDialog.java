@@ -17,12 +17,10 @@ public class DeleteToDoDialog extends AlertDialog {
         void DeleteAllToDos();
     }
 
-    /* ---- Constructor ---- */
     public DeleteToDoDialog(Context context) {
         super(context);
     }
 
-    /* ---- Setting up the dialog ---- */
     public void showAlert(final ToDoItem item) {
         String title = getContext().getString(R.string.delete_all_to_do);
         String message = getContext().getString(R.string.delete_all_to_do_message);
@@ -60,6 +58,4 @@ public class DeleteToDoDialog extends AlertDialog {
     public void setListener(DeleteDialogListener listener) {
         this.listener = listener;
     }
-
-    /* ===============END OF CLASS=============== */
 }

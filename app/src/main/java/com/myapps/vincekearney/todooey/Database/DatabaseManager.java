@@ -143,7 +143,7 @@ public class DatabaseManager {
         return localDB.getReadableDatabase();
     }
 
-    /// These are overridden
+    /* ---- There are overridden ---- */
     public List<Object> createObjectAndAddToList(List<Object> list, Cursor cursor) {
         return null;
     }
