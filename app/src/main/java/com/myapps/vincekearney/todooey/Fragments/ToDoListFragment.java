@@ -25,6 +25,7 @@ import java.util.List;
 public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoListAdapterListener, DeleteToDoDialog.DeleteDialogListener {
     // private final int TODO_ADDED = 1; This is still in the MainActivity
     private static final String TAG = "ToDoListFragment";
+    private static final String KEY_HIDE_ITEMS = "pref_key_hide";
     private static final String KEY_HIDE_ALL = "pref_key_hide_all";
     /* ---- Properties ---- */
     private DeleteToDoDialog deleteToDoDialog;
@@ -74,7 +75,7 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
     public void refreshToDos(int position) {
         switch (position) {
             case 0:
-                if (this.sharedPreferences.getBoolean(KEY_HIDE_ALL, false) == true)
+                if (this.sharedPreferences.getBoolean(KEY_HIDE_ALL, false) == true && this.sharedPreferences.getBoolean(KEY_HIDE_ITEMS,false) == true)
                     this.toDoListItems = DatabaseManager.toDoItemHelper().getToDosCompleted(false);
                 else
                     this.toDoListItems = DatabaseManager.toDoItemHelper().getAllToDos();
