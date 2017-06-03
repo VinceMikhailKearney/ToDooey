@@ -65,7 +65,7 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
     /* ---- onClick methods ---- */
     // Delete All
     public void deleteAllToDoItems() {
-        this.deleteToDoDialog.setDialogToDo(null).show();
+        this.deleteToDoDialog.showAlert(null);
     }
 
     /* ---- Helper methods ---- */
@@ -111,7 +111,8 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
 
     @Override
     public void DeleteItem(ToDoItem item) {
-        this.deleteToDoDialog.setDialogToDo(item).show();
+        this.deleteToDoDialog.showAlert(item);
+//        this.deleteToDoDialog.setDialogToDo(item).show();
     }
 
     // /* ---- DeleteToDoDialogListener methods ---- */
