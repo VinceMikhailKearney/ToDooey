@@ -20,11 +20,9 @@ import java.util.List;
 
 public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoListAdapterListener, DeleteToDoDialog.DeleteDialogListener
 {
-    private final int TODO_ADDED = 1;
+    // private final int TODO_ADDED = 1; This is still in the MainActivity
     private static final String TAG = "ToDoListFragment";
-    private static final String KEY_HIDE = "pref_key_hide";
     private static final String KEY_HIDE_ALL = "pref_key_hide_all";
-    private static final String KEY_HIDE_COMPLETED = "pref_key_hide_completed";
     /* ---- Properties ---- */
     private DeleteToDoDialog deleteToDoDialog;
     private List<ToDoItem> toDoListItems = new ArrayList<>();
@@ -39,7 +37,7 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
     {
         View view = inflater.inflate(R.layout.to_do_list_fragment, container, false);
 
-         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         RecyclerView toDoList = (RecyclerView) view.findViewById(R.id.toDoList);
         toDoList.setHasFixedSize(true);
@@ -47,15 +45,15 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
         if(this.currentToDoList != null)
             this.currentToDoList.setText(R.string.all);
 
-        // Set up other
-        this.dbHelper = new ToDoDBHelper(getActivity());
-        this.toDoListItems = dbHelper.getAllToDos();
         // ToDoAdapter
         this.toDoAdapter = new ToDoListAdapter(this.toDoListItems);
-        this.toDoAdapter.setToDoList(this.toDoListItems);
         this.toDoAdapter.setToDoListAdapterListener(this);
         toDoList.setLayoutManager(new LinearLayoutManager(getActivity()));
         toDoList.setAdapter(this.toDoAdapter);
+
+        // Set up other
+        this.dbHelper = new ToDoDBHelper(getActivity());
+        this.refreshToDos(0); // The default list, at the minute, is ALL. So refresh for this.
 
         // Delete Dialog
         this.deleteToDoDialog = new DeleteToDoDialog(getActivity());
@@ -76,7 +74,10 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
         switch (position)
         {
             case 0:
-                this.toDoListItems = dbHelper.getAllToDos();
+                if(this.sharedPreferences.getBoolean(KEY_HIDE_ALL,false) == true)
+                    this.toDoListItems = dbHelper.getToDos(false);
+                else
+                    this.toDoListItems = dbHelper.getAllToDos();
                 this.currentToDoList.setText(R.string.all);
                 break;
             case 1:

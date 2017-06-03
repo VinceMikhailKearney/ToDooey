@@ -14,11 +14,5 @@
             android:summary="Hide Items Once Completed In Section All"
             android:title="Hide In All "
             android:defaultValue="false" />
-        <CheckBoxPreference
-            android:key="pref_key_hide_completed"
-            android:dependency="pref_key_hide"
-            android:summary="Hide Items Once Completed In Section Completed"
-            android:title="Hide In Completed "
-            android:defaultValue="false" />
     </PreferenceCategory>
 </PreferenceScreen>
