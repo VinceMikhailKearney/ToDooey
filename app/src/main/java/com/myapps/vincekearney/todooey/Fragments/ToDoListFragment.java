@@ -106,7 +106,10 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
     public void OnClickItem(ToDoItem item) {
         Log.i(TAG, "Clicked a check box and received listener event.");
         DatabaseManager.toDoItemHelper().updateCompleted(item.getId(), !item.getCompleted());
-        this.toDoListItems = DatabaseManager.toDoItemHelper().getAllToDos();
+        if (this.sharedPreferences.getBoolean(KEY_HIDE_ALL, false) == true && this.sharedPreferences.getBoolean(KEY_HIDE_ITEMS,false) == true)
+            this.toDoListItems = DatabaseManager.toDoItemHelper().getToDosCompleted(false);
+        else
+            this.toDoListItems = DatabaseManager.toDoItemHelper().getAllToDos();
         this.toDoAdapter.setToDoList(this.toDoListItems);
     }
 
