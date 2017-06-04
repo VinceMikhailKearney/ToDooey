@@ -48,15 +48,11 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
             this.currentToDoList.setText(R.string.all);
 
         // ToDoAdapter
-        this.toDoAdapter = new ToDoListAdapter(this.toDoListItems);
+        this.toDoAdapter = new ToDoListAdapter();
         this.toDoAdapter.setToDoListAdapterListener(this);
         toDoList.setLayoutManager(new LinearLayoutManager(getActivity()));
         toDoList.setAdapter(this.toDoAdapter);
-
-        // Set up other
-        Log.i(TAG, "About to try and refresh the ToDos here");
         this.refreshToDos(0); // The default list, at the minute, is ALL. So refresh for this.
-        Log.i(TAG, "Well? Did we?");
 
         // Delete Dialog
         // https://stackoverflow.com/questions/7933206/android-unable-to-add-window-token-null-is-not-for-an-application-exception
@@ -66,7 +62,7 @@ public class ToDoListFragment extends Fragment implements ToDoListAdapter.ToDoLi
         return view;
     }
 
-    /* ---- onClick methods ---- */
+    // Called from the options menu on the ToDoListActivity (MainActivity)
     public void deleteAllToDoItems() {
         this.deleteToDoDialog.showAlert(null);
     }

@@ -103,9 +103,9 @@ public class ToDoListActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        // If the navigation drawer is not set up - Let's just catch the NPE here.
+        // If the navigation drawer is not set up - Let's just catch the NullPE here.
         if (this.drawerToggle == null) {
-            Toast.makeText(ToDoListActivity.this, "The drawer toggle is null. Would throw NPE.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ToDoListActivity.this, "The drawer toggle is null. Would throw NullPE.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -119,7 +119,6 @@ public class ToDoListActivity extends AppCompatActivity {
 
         if (id == R.id.action_deleteAllToDos) {
             this.toDoFragment.deleteAllToDoItems();
-            this.toDoFragment.refreshToDos(this.drawerPosition);
             return true;
         }
 

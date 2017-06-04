@@ -29,10 +29,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoVi
     }
 
     /* ---- Constructor and setter methods ---- */
-    public ToDoListAdapter(List<ToDoItem> list) {
-        Log.i(TAG, "ToDoListAdapter");
-        this.setToDoList(list);
-    }
+    public ToDoListAdapter() {}
 
     public void setToDoList(List<ToDoItem> list) {
         Log.i(TAG, "Setting to do list on the adapter");
