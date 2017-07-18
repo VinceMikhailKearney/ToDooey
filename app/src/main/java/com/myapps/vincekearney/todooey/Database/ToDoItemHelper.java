@@ -6,6 +6,8 @@ import android.text.format.DateUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -47,7 +49,15 @@ public class ToDoItemHelper extends DatabaseManager {
 
     public List<ToDoItem> getAllToDos() {
         Log.i(TAG, "Asking for all ToDo items.");
-        return (List<ToDoItem>) (List<?>) getObjectsWithQuery(null);
+
+        List<ToDoItem> toDoItems = (List<ToDoItem>) (List<?>) getObjectsWithQuery(null);
+        Collections.sort(toDoItems, new Comparator<ToDoItem>() {
+            @Override
+            public int compare(ToDoItem item1, ToDoItem item2) {
+                return item2.getDate().compareTo(item1.getDate());
+            }
+        });
+        return toDoItems;
     }
 
     public List<ToDoItem> getToDosCompleted(Boolean completed) {
