@@ -34,7 +34,7 @@ public class ToDoListActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private String activityTitle;
     private ToDoListFragment toDoFragment;
-    private int drawerPosition;
+    private ToDoListFragment.ToDoSection drawerPosition;
 
     /* --- Lifecycle methods ---- */
     @Override
@@ -48,7 +48,7 @@ public class ToDoListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         this.drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        this.drawerPosition = 0;
+        this.drawerPosition = ToDoListFragment.ToDoSection.ALL;
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -141,7 +141,7 @@ public class ToDoListActivity extends AppCompatActivity {
 
     /* ---- Navigation Drawer ---- */
     private void populateNavDrawer() {
-        ListView drawerList = (ListView) findViewById(R.id.navList);
+        final ListView drawerList = (ListView) findViewById(R.id.navList);
         String[] osArray = {"All", "Completed", "Not Completed", "Today"};
         ArrayAdapter<String> navAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, osArray);
         if (drawerList != null) {
@@ -149,7 +149,15 @@ public class ToDoListActivity extends AppCompatActivity {
             drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    toDoFragment.refreshToDos(position);
+                    drawerPosition = ToDoListFragment.ToDoSection.ALL;
+                    if (position == 1)
+                        drawerPosition = ToDoListFragment.ToDoSection.COMPLETED;
+                    else if (position == 2)
+                        drawerPosition = ToDoListFragment.ToDoSection.NOT_COMPLETED;
+                    else if (position == 3)
+                        drawerPosition = ToDoListFragment.ToDoSection.TODAY;
+
+                    toDoFragment.refreshToDos(drawerPosition);
                     drawerLayout.closeDrawers();
                 }
             });

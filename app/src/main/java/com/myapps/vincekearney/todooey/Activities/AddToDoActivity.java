@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import android.view.View;
+import android.widget.Toast;
 
 import com.myapps.vincekearney.todooey.R;
 
@@ -41,10 +42,7 @@ public class AddToDoActivity extends AppCompatActivity {
 
         if (toDo.isEmpty()) {
             Log.i("AddToDo", "To do text empty");
-            /** As the to do item is empty we are simply cancelling.
-             * Set the result code to cancelled.
-             */
-            setResult(RESULT_CANCELED);
+            Toast.makeText(this, "No text entered for ToDo", Toast.LENGTH_SHORT).show();
         } else {
             Log.i("AddToDo", "We got text");
             /** Here we have data that we want to pass back.
