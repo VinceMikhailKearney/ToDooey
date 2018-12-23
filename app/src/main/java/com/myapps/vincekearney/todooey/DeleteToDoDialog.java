@@ -44,13 +44,13 @@ public class DeleteToDoDialog extends AlertDialog {
                 })
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
-                    public void onClick(final SweetAlertDialog sDialog) {
+                    public void onClick(final SweetAlertDialog sweetAlertDialog) {
                         if (item != null)
                             listener.DeleteToDo(item);
                         else
                             listener.DeleteAllToDos();
 
-                        sDialog.cancel();
+                        sweetAlertDialog.cancel();
                     }
                 }).show();
     }
